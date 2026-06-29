@@ -34,6 +34,23 @@ It is organized by delivery area, not by sprint.
 
 ---
 
+## Delivery breakdown
+
+- Define delivery milestones.
+- Define implementation PR sequence.
+- Define scope and explicit non-scope for each PR.
+- Define expected files or areas touched for each PR.
+- Define required tests for each PR.
+- Define acceptance criteria for each PR.
+- Define CEO and CTO review focus for each PR.
+- Define risks and mitigations for each PR.
+- Define dependencies between PRs.
+- Define milestone definitions of done.
+- Define milestone gates.
+- Approve Delivery Breakdown before implementation starts.
+
+---
+
 ## Domain model
 
 - Implement Objective model.
@@ -57,17 +74,53 @@ It is organized by delivery area, not by sprint.
 
 ---
 
-## Day configuration
+## Day validation and closure rules
 
-- Build Configure Day screen.
-- Select objectives for day.
-- Assign base objective weights.
-- Add bonus objectives.
+- Implement day activation validator.
 - Validate base total equals 100%.
 - Validate at least 3 base objectives.
-- Activate day.
-- Mark day as excluded.
-- Edit active day with warning copy.
+- Validate required numeric objective fields.
+- Detect all base objectives complete.
+- Determine midnight closure eligibility.
+- Prevent closure based only on bonus compensation.
+- Add day validation and closure tests.
+
+---
+
+## Weekly summary rules
+
+- Implement Monday-first week calculation.
+- Calculate weekly performance from scored days only.
+- Count scored days.
+- Count excluded days.
+- Count unconfigured days.
+- Show weekly consistency separately from performance.
+- Add weekly summary tests.
+
+---
+
+## Persistence foundation
+
+- Add Supabase schema migrations.
+- Add repository interfaces.
+- Add Supabase repository implementations.
+- Add `user_id` ownership model.
+- Enable Row Level Security on founder-data tables.
+- Store closed-day `finalScore`, `baseScore`, and `bonusScore` snapshots.
+- Validate anonymous access denial.
+- Validate owner-only read/write access.
+- Validate insert and update ownership policies.
+
+---
+
+## Authentication shell
+
+- Add Supabase Auth email/password login.
+- Add logout.
+- Add founder account allowlist.
+- Protect app routes.
+- Keep product UX minimal.
+- Validate non-allowlisted users cannot enter the app.
 
 ---
 
@@ -79,6 +132,20 @@ It is organized by delivery area, not by sprint.
 - Edit objective.
 - Deactivate objective.
 - Reactivate objective.
+
+---
+
+## Day configuration
+
+- Build Configure Day screen.
+- Select objectives for day.
+- Assign base objective weights.
+- Add bonus objectives.
+- Validate base total equals 100%.
+- Validate at least 3 base objectives.
+- Activate day.
+- Mark day as excluded.
+- Edit active day with warning copy.
 
 ---
 

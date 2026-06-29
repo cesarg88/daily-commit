@@ -18,9 +18,9 @@ The goal is to create a personal, portable, score-based daily board that helps a
 
 ## Current Phase
 
-Technical Strategy proposal.
+Delivery Planning / Implementation Proposal.
 
-Product discovery and MVP definition are complete. Implementation must not begin until the Technical Strategy proposal is approved by the CEO and CTO.
+Product discovery, MVP definition, and Technical Strategy are complete. Product implementation must not begin until the Delivery Breakdown is approved by the CEO and CTO.
 
 ## Documentation
 
@@ -28,7 +28,7 @@ Product discovery and MVP definition are complete. Implementation must not begin
 - `docs/01-requirements/` — MVP scope, user flows and user stories
 - `docs/02-design/` — UX, screens and information architecture
 - `docs/03-architecture/` — conceptual model, data model and technical architecture
-- `docs/04-delivery/` — implementation plan, milestones and backlog
+- `docs/04-delivery/` — delivery breakdown, implementation plan, milestones and backlog
 - `docs/05-decisions/` — architecture/product decision records
 
-Start technical review with `docs/03-architecture/technical-strategy-proposal.md`.
+Start delivery review with `docs/04-delivery/delivery-breakdown.md`.
