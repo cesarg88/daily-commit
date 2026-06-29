@@ -21,6 +21,12 @@ It is organized by delivery area, not by sprint.
 - Select persistence strategy.
 - Select hosting strategy.
 - Decide whether MVP requires authentication.
+- Decide midnight auto-close strategy.
+- Decide domain architecture.
+- Decide testing strategy.
+- Decide local development workflow.
+- Decide CI / validation strategy.
+- Approve Technical Strategy proposal.
 - Create project scaffold.
 - Configure test framework.
 - Configure linting or formatting.

@@ -12,7 +12,7 @@ Create enough product documentation to guide implementation.
 
 ### Status
 
-In progress.
+Complete.
 
 ### Completion criteria
 
@@ -39,9 +39,17 @@ Prepare the repository for implementation.
 - Technical stack selected.
 - Persistence strategy selected.
 - Hosting strategy selected.
-- Project scaffold created.
-- Test framework configured.
-- First CI or validation command documented.
+- Authentication decision recorded.
+- Midnight auto-close strategy recorded.
+- Domain architecture recorded.
+- Testing strategy recorded.
+- Local development workflow proposed.
+- CI / validation strategy proposed.
+- First implementation PR sequence proposed.
+
+Project scaffold, test framework configuration, and first CI implementation belong in the first post-approval implementation PR.
+
+That scaffold PR must include tooling and a placeholder route only, with no domain or product feature implementation.
 
 ---
 
