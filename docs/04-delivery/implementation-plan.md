@@ -25,15 +25,18 @@ Choose and document the technical foundation.
 
 ### Deliverables
 
-- Frontend framework decision.
-- Persistence strategy decision.
-- Hosting strategy decision.
-- Basic project setup.
-- Initial test setup.
+- Technical Strategy proposal.
+- Frontend framework decision ADR.
+- Persistence, hosting, and authentication ADR.
+- Midnight auto-close ADR.
+- Domain architecture and testing ADR.
+- Approved first implementation PR sequence.
 
 ### Notes
 
-No product feature implementation should start until the technical foundation is accepted.
+No product feature implementation or project scaffold should start until the Technical Strategy proposal is approved by the CEO and CTO.
+
+After approval, create the minimal scaffold in a separate PR.
 
 ---
 
@@ -165,3 +168,5 @@ Each PR should include:
 - validation performed;
 - screenshots when UI changes;
 - known limitations.
+
+For the Technical Strategy proposal PR, explicitly confirm that no product implementation was started.

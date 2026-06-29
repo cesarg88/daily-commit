@@ -4,6 +4,12 @@ This document defines the initial technical direction for Daily Commit.
 
 It should be treated as a proposal-level foundation, not a final implementation blueprint.
 
+The current approval proposal is documented in:
+
+- `docs/03-architecture/technical-strategy-proposal.md`
+
+Implementation must not begin until the Technical Strategy proposal is approved by the CEO and CTO.
+
 ---
 
 ## Architecture goals
@@ -134,9 +140,9 @@ Calculates weekly performance and consistency.
 
 The MVP needs reliable persistence, but does not require offline-first sync.
 
-The final storage decision should be made before implementation.
+The Technical Strategy proposal recommends Supabase Postgres as the MVP source of truth, with Supabase Auth and Vercel hosting. This recommendation remains proposed until CEO and CTO approval.
 
-Acceptable options include:
+Earlier acceptable options included:
 
 - local browser storage for a very early prototype;
 - a lightweight backend database for cross-device usage;
@@ -173,11 +179,13 @@ UI tests can wait until behavior stabilizes.
 
 ## Open technical decisions
 
-- Frontend framework.
-- Persistence strategy.
-- Hosting strategy.
-- Authentication requirement for single-user MVP.
-- Whether to support cross-device sync in MVP.
-- Whether to use server-side scheduled jobs for midnight closure.
+The following decisions are proposed in `docs/03-architecture/technical-strategy-proposal.md` and recorded as ADRs:
 
-These should be resolved in implementation planning or ADRs.
+- Frontend framework: Next.js, React, TypeScript, and Tailwind CSS.
+- Persistence strategy: Supabase Postgres.
+- Hosting strategy: Vercel.
+- Authentication: Supabase Auth with one allowlisted founder account.
+- Cross-device sync: supported through hosted persistence, not offline-first sync.
+- Midnight closure: idempotent lazy closure plus Vercel Cron.
+
+These decisions are not accepted until the Technical Strategy proposal is approved.

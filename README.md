@@ -18,7 +18,9 @@ The goal is to create a personal, portable, score-based daily board that helps a
 
 ## Current Phase
 
-Product discovery and MVP definition.
+Technical Strategy proposal.
+
+Product discovery and MVP definition are complete. Implementation must not begin until the Technical Strategy proposal is approved by the CEO and CTO.
 
 ## Documentation
 
@@ -28,3 +30,5 @@ Product discovery and MVP definition.
 - `docs/03-architecture/` — conceptual model, data model and technical architecture
 - `docs/04-delivery/` — implementation plan, milestones and backlog
 - `docs/05-decisions/` — architecture/product decision records
+
+Start technical review with `docs/03-architecture/technical-strategy-proposal.md`.
