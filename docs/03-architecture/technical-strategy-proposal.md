@@ -76,7 +76,7 @@ Recommended data ownership:
 - `objectives`;
 - `days`;
 - `daily_objectives`;
-- optional stored score snapshot fields for closed days.
+- closed-day score snapshots.
 
 Recommended access pattern:
 
@@ -85,6 +85,22 @@ Recommended access pattern:
 - Database schema is managed by migrations.
 - Row Level Security is enabled even though the MVP has one user.
 - Tables include `user_id` from the start to support authorization and future generalization without changing the domain model.
+
+Closed-day score snapshots:
+
+- Store `finalScore`, `baseScore`, and `bonusScore` when a day closes.
+- Treat the stored snapshot as the historical result for weekly review and future history screens.
+- Continue to keep score calculation in the domain layer; persistence stores the result of domain calculation, not a separate scoring implementation.
+
+RLS acceptance criteria for the first persistence PR:
+
+- RLS is enabled on every table containing founder data.
+- Founder-owned rows include a `user_id` or have an equivalent policy-enforced ownership path.
+- Anonymous users cannot read, create, update, or delete founder data.
+- Authenticated users can only read, create, update, or delete rows they own.
+- Insert and update policies prevent writing rows for another `user_id`.
+- Service-role credentials are never exposed to browser/client code.
+- The PR includes validation evidence for unauthorized access attempts, either through automated tests or documented SQL checks.
 
 Rationale:
 
@@ -118,14 +134,18 @@ Operational expectations:
 
 - Production environment variables are configured in Vercel.
 - Supabase service-role credentials are only used server-side.
-- Preview environments may point to a separate Supabase project or a clearly labeled development database.
+- Vercel preview deployments point to a dedicated Supabase preview project, not production.
+- The preview Supabase project uses disposable seed data and may be reset during development.
+- Local development may initially use the preview Supabase project, but production data must never be used for local or preview validation.
 - The first implementation PR should document setup commands and required environment variables, but should not include secrets.
 
 ## Authentication decision for the MVP
 
 Authentication is required for the MVP.
 
-Use Supabase Auth with one allowlisted founder email. Email OTP or magic link is sufficient. Password auth may be enabled only if it is simpler for the founder's actual daily use.
+Use Supabase Auth email/password login for one allowlisted founder email.
+
+Password login is the MVP auth method because it is predictable for daily use across browser sessions and does not require opening email during routine app access. Password reset may use Supabase's standard email recovery flow.
 
 Rationale:
 
@@ -149,13 +169,15 @@ Use an idempotent server-side closure policy with two triggers:
 1. Lazy closure whenever the app loads or a protected server action runs.
 2. Scheduled closure through Vercel Cron calling a protected endpoint.
 
-The closure policy should close any active day whose local date is earlier than the current date in the configured product timezone.
+The closure policy should close any active day whose local date is earlier than the current date in the hard-coded MVP timezone.
 
-Recommended MVP timezone:
+MVP timezone:
 
 ```text
 Europe/Madrid
 ```
+
+`Europe/Madrid` is hard-coded for the MVP. Timezone configuration is deferred until the product needs to support travel, relocation, or multiple users.
 
 Rationale:
 
@@ -344,7 +366,8 @@ Recommended first PRs:
 1. `chore: scaffold web app`
    - Create minimal Next.js TypeScript app.
    - Add lint, format, typecheck, test, and validate commands.
-   - No product screens beyond a placeholder shell.
+   - Add a placeholder route only.
+   - Do not add domain models, scoring rules, persistence, authentication flows, product screens, or product feature implementation.
 
 2. `feat: add domain scoring rules`
    - Add pure domain models and score calculator.
@@ -363,9 +386,10 @@ Recommended first PRs:
    - Add Supabase schema migrations.
    - Add repository interfaces and Supabase implementations.
    - Add RLS and single-user ownership model.
+   - Acceptance requires RLS on founder data tables, owner-only policies, anonymous access denial, write ownership enforcement, server-only service-role usage, and validation evidence for unauthorized access attempts.
 
 6. `feat: add authentication shell`
-   - Add Supabase Auth login/logout flow for the allowlisted founder account.
+   - Add Supabase Auth email/password login/logout flow for the allowlisted founder account.
    - Protect app routes.
    - Keep product UX minimal.
 
@@ -443,12 +467,12 @@ Rejected because the MVP stores personal data in a remote database. Single-user 
 
 Rejected because the MVP is for one real founder user. The proposal includes `user_id` and RLS as a low-cost future-proofing measure, but does not include product UX for multiple users.
 
-## Open questions
+## Closed pre-approval decisions
 
-- Should the founder use email OTP/magic link or password login for daily convenience?
-- Should preview deployments point to a separate Supabase project or a shared development project?
-- Should the product timezone be configurable later, or hard-coded to `Europe/Madrid` for MVP?
-- Should closed-day score snapshots store only final scores, or also base and bonus scores for future review?
+- MVP auth method: Supabase Auth email/password for one allowlisted founder email.
+- Preview Supabase strategy: Vercel preview deployments use a dedicated Supabase preview project with disposable data, never production data.
+- MVP timezone: hard-coded `Europe/Madrid`.
+- Closed-day score snapshots: store `finalScore`, `baseScore`, and `bonusScore`.
 
 ## Approval checklist
 

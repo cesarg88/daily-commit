@@ -19,7 +19,7 @@ The app will store personal daily routine, health-adjacent, and discipline data,
 Use:
 
 - Supabase Postgres as the source of truth;
-- Supabase Auth for one allowlisted founder account;
+- Supabase Auth email/password for one allowlisted founder account;
 - Row Level Security from the first persistence migration;
 - Vercel to host the Next.js app.
 
@@ -49,7 +49,9 @@ This combination keeps infrastructure simple while preserving future portability
 
 - Tables should include `user_id` even though only one account is allowed.
 - Service-role keys must only be used server-side.
-- Preview deployments need a deliberate database strategy.
+- Vercel preview deployments use a dedicated Supabase preview project with disposable data, never production data.
+- Closed-day score snapshots store `finalScore`, `baseScore`, and `bonusScore`.
+- The first persistence PR must include explicit RLS acceptance evidence.
 
 ## Alternatives considered
 
@@ -73,8 +75,11 @@ Not selected because the app stores personal data in a remote database.
 
 - Define the initial Supabase schema after approval.
 - Add RLS policies with the first persistence migration.
+- Validate that anonymous users cannot access founder data.
+- Validate that authenticated users can only read, create, update, or delete rows they own.
+- Validate that insert and update policies prevent writing rows for another `user_id`.
 - Add `.env.example` during scaffold or persistence setup.
-- Decide whether preview deployments use a separate Supabase project.
+- Configure Vercel previews to use the dedicated Supabase preview project.
 
 ## Related documents
 

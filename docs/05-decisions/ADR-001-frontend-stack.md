@@ -42,7 +42,8 @@ The domain layer must remain independent from Next.js and React.
 
 ### Neutral / operational
 
-- The first implementation PR should scaffold only the minimal app and validation commands.
+- The first implementation PR should scaffold only the minimal app, tooling, validation commands, and a placeholder route.
+- The scaffold PR must not include domain models, scoring rules, persistence, authentication flows, product screens, or product feature implementation.
 - UI tests should wait until real product screens exist.
 
 ## Alternatives considered
@@ -63,7 +64,7 @@ Not selected because Next.js has the most direct alignment with the proposed Ver
 
 - Scaffold the minimal Next.js TypeScript app only after approval.
 - Add `npm run validate` to combine lint, typecheck, test, and build.
-- Keep product screens out of the scaffold PR.
+- Keep domain logic, persistence, auth flows, product screens, and product features out of the scaffold PR.
 
 ## Related documents
 

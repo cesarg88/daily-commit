@@ -49,6 +49,8 @@ Prepare the repository for implementation.
 
 Project scaffold, test framework configuration, and first CI implementation belong in the first post-approval implementation PR.
 
+That scaffold PR must include tooling and a placeholder route only, with no domain or product feature implementation.
+
 ---
 
 ## Milestone 2 — Domain rules

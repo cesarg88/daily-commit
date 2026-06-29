@@ -91,16 +91,17 @@ Calculated score values for a day.
 
 ```text
 dayId: string
+finalScore: number
 baseScore: number
 bonusScore: number
-finalScore: number
-bonusEarned: number
 calculatedAt: datetime
 ```
 
 ### Notes
 
-Score can be calculated on demand, but storing snapshots may be useful for closed days.
+Score can be calculated on demand for active days. For closed days, the MVP stores `finalScore`, `baseScore`, and `bonusScore` as the historical score snapshot.
+
+The stored snapshot is the result of domain calculation at closure time. Persistence must not introduce a separate scoring implementation.
 
 ---
 

@@ -177,15 +177,18 @@ UI tests can wait until behavior stabilizes.
 
 ---
 
-## Open technical decisions
+## Proposed technical decisions
 
 The following decisions are proposed in `docs/03-architecture/technical-strategy-proposal.md` and recorded as ADRs:
 
 - Frontend framework: Next.js, React, TypeScript, and Tailwind CSS.
 - Persistence strategy: Supabase Postgres.
 - Hosting strategy: Vercel.
-- Authentication: Supabase Auth with one allowlisted founder account.
+- Authentication: Supabase Auth email/password with one allowlisted founder account.
 - Cross-device sync: supported through hosted persistence, not offline-first sync.
 - Midnight closure: idempotent lazy closure plus Vercel Cron.
+- Preview environment: dedicated Supabase preview project with disposable data.
+- MVP timezone: hard-coded `Europe/Madrid`.
+- Closed-day snapshots: store `finalScore`, `baseScore`, and `bonusScore`.
 
 These decisions are not accepted until the Technical Strategy proposal is approved.

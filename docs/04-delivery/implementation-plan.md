@@ -38,6 +38,8 @@ No product feature implementation or project scaffold should start until the Tec
 
 After approval, create the minimal scaffold in a separate PR.
 
+The scaffold PR must include tooling, validation commands, and a placeholder route only. It must not include domain models, scoring rules, persistence, authentication flows, product screens, or product feature implementation.
+
 ---
 
 ## Phase 1 — Domain model and scoring

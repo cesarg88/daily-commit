@@ -23,7 +23,7 @@ Use two midnight closure triggers:
 - lazy closure when the app loads or a relevant server action runs;
 - scheduled closure via Vercel Cron calling a protected endpoint.
 
-For the MVP, evaluate midnight closure in the `Europe/Madrid` timezone by closing active days whose local date is earlier than the current local date.
+For the MVP, hard-code the product timezone to `Europe/Madrid` and evaluate midnight closure by closing active days whose local date is earlier than the current local date.
 
 ## Rationale
 
@@ -47,6 +47,7 @@ Comparing local calendar dates avoids hard-coding a UTC offset and reduces dayli
 ### Neutral / operational
 
 - Store `closedAt` and final score when closure happens.
+- Store closed-day `finalScore`, `baseScore`, and `bonusScore`.
 - Do not close based only on final score reaching 100% through bonus compensation.
 - Keep base-completion closure separate from midnight closure.
 
@@ -68,7 +69,7 @@ Not selected because offline-first behavior is out of MVP scope.
 
 - Add `DayClosurePolicy` domain tests before wiring any endpoint.
 - Add a protected cron route after persistence exists.
-- Document the configured product timezone in setup documentation.
+- Document that `Europe/Madrid` is hard-coded for the MVP.
 
 ## Related documents
 
