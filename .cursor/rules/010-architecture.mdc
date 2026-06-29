@@ -1,0 +1,9 @@
+# Architecture
+
+Preserve the documented architecture for the project.
+
+- Respect existing boundaries and ownership.
+- Do not bypass approved interfaces.
+- Do not introduce new layers without approval.
+- Prefer the smallest design that satisfies the approved proposal.
+- Raise architectural concerns before changing direction.

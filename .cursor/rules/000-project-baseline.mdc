@@ -1,0 +1,9 @@
+# Project Baseline
+
+Projects using PEOS should keep delivery focused and decision authority explicit.
+
+- Respect approved project docs and current scope.
+- Keep PRs small enough to review with confidence.
+- Do not expand scope silently.
+- Do not introduce major architecture or infrastructure changes without approval.
+- Surface tradeoffs before implementing decisions that affect product or technical direction.

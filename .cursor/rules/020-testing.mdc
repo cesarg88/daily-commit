@@ -1,0 +1,9 @@
+# Testing
+
+Treat tests as part of the implementation, not a follow-up.
+
+- Add or update tests when behavior changes.
+- Cover success and failure paths when practical.
+- Use fakes, mocks, or fixtures where appropriate.
+- Do not weaken tests to make implementation easier.
+- Explain any meaningful test gaps in the handoff or PR.
