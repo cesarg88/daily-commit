@@ -4,11 +4,11 @@ This document defines the initial technical direction for Daily Commit.
 
 It should be treated as a proposal-level foundation, not a final implementation blueprint.
 
-The current approval proposal is documented in:
+The approved technical strategy is documented in:
 
 - `docs/03-architecture/technical-strategy-proposal.md`
 
-Implementation must not begin until the Technical Strategy proposal is approved by the CEO and CTO.
+Implementation must not begin until the Delivery Breakdown is approved by the CEO and CTO.
 
 ---
 
@@ -140,7 +140,7 @@ Calculates weekly performance and consistency.
 
 The MVP needs reliable persistence, but does not require offline-first sync.
 
-The Technical Strategy proposal recommends Supabase Postgres as the MVP source of truth, with Supabase Auth and Vercel hosting. This recommendation remains proposed until CEO and CTO approval.
+The approved Technical Strategy uses Supabase Postgres as the MVP source of truth, with Supabase Auth and Vercel hosting.
 
 Earlier acceptable options included:
 
@@ -172,14 +172,14 @@ UI tests can wait until behavior stabilizes.
 
 - Documentation must remain in English.
 - Product behavior must be implemented in small PRs.
-- No product implementation should start before technical foundation decisions are approved.
+- No product implementation should start before the Delivery Breakdown is approved.
 - Architecture should support future offline evaluation without making offline an MVP blocker.
 
 ---
 
-## Proposed technical decisions
+## Accepted technical decisions
 
-The following decisions are proposed in `docs/03-architecture/technical-strategy-proposal.md` and recorded as ADRs:
+The following decisions are accepted in `docs/03-architecture/technical-strategy-proposal.md` and recorded as ADRs:
 
 - Frontend framework: Next.js, React, TypeScript, and Tailwind CSS.
 - Persistence strategy: Supabase Postgres.
@@ -190,5 +190,3 @@ The following decisions are proposed in `docs/03-architecture/technical-strategy
 - Preview environment: dedicated Supabase preview project with disposable data.
 - MVP timezone: hard-coded `Europe/Madrid`.
 - Closed-day snapshots: store `finalScore`, `baseScore`, and `bonusScore`.
-
-These decisions are not accepted until the Technical Strategy proposal is approved.

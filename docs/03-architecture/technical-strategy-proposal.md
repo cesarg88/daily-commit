@@ -2,9 +2,9 @@
 
 ## Status
 
-Proposed for CEO and CTO review.
+Approved by CEO and CTO.
 
-Implementation must not begin until this proposal is approved or revised.
+Implementation remains blocked until the Delivery Breakdown is approved by the CEO and CTO.
 
 ## Date
 
@@ -406,10 +406,18 @@ Recommended first PRs:
    - Support binary and numeric updates.
    - Recalculate score immediately.
 
-10. `feat: add day closure and week review`
+10. `feat: add day closure orchestration`
     - Add closure orchestration.
     - Add protected cron endpoint.
-    - Add weekly review.
+    - Store closed-day score snapshots.
+
+11. `feat: add weekly review`
+    - Add Monday-first weekly review.
+    - Calculate weekly performance from scored days only.
+    - Show weekly consistency separately.
+
+12. `chore: harden MVP for dogfooding`
+    - Add mobile usability, empty states, error states, copy review, persistence validation, and dogfooding readiness.
 
 ## Main technical risks and mitigations
 
@@ -425,9 +433,9 @@ Mitigation: enable RLS from the first persistence migration, add explicit owners
 
 Mitigation: evaluate closure by comparing local dates in `Europe/Madrid`, not by hard-coding a fixed UTC offset.
 
-### Risk: the first scaffold grows into product implementation before approval
+### Risk: the first scaffold grows into product implementation before delivery approval
 
-Mitigation: do not scaffold in this proposal PR. After approval, the scaffold PR must contain only tooling, project structure, validation commands, and a placeholder route.
+Mitigation: do not scaffold before Delivery Breakdown approval. After approval, the scaffold PR must contain only tooling, project structure, validation commands, and a placeholder route.
 
 ### Risk: hosted services add operational dependency
 
