@@ -2,9 +2,11 @@
 
 ## Status
 
-Proposed for CEO and CTO review.
+Accepted by CEO and CTO.
 
-Delivery implementation must not begin until this Delivery Breakdown is approved by both roles.
+Delivery implementation must not begin until this PR is marked ready and merged.
+
+Approval recorded on 2026-06-29.
 
 ## Date
 
@@ -18,9 +20,9 @@ It defines small, reviewable implementation milestones and PR-sized steps for Da
 
 ## Implementation status
 
-No product implementation has started in this proposal.
+No product implementation has started in this Delivery Breakdown PR.
 
-This proposal does not add an application scaffold, runtime dependencies, Supabase migrations, UI screens, product code, auth flows, persistence code, or domain implementation.
+This PR does not add an application scaffold, runtime dependencies, Supabase migrations, UI screens, product code, auth flows, persistence code, or domain implementation.
 
 ## Delivery principles
 
@@ -105,7 +107,7 @@ The Lead Orchestrator should request focused specialist review when:
 - a UI flow risks weakening the daily commitment model;
 - a PR becomes large enough that CEO/CTO review clarity is at risk.
 
-## Proposed delivery sequence
+## Accepted delivery sequence
 
 | Milestone | PRs | Gate |
 | --- | --- | --- |
@@ -129,12 +131,13 @@ Definition of done:
 - Each implementation PR has scope, explicit non-scope, expected files or areas touched, required tests, acceptance criteria, review focus, risks, mitigations, and dependencies.
 - Lead Orchestrator execution model, delegation criteria, and handoff expectations are documented.
 - CEO and CTO review instructions are clear.
-- The documentation confirms that implementation remains blocked.
+- The documentation confirms that implementation remains blocked until this PR is marked ready and merged.
 
 Gate before M1:
 
-- CEO approves that the delivery plan preserves product intent and MVP boundaries.
-- CTO approves that the delivery plan follows the approved Technical Strategy.
+- This PR is marked ready for review.
+- This PR is merged.
+- CEO and CTO approval is recorded.
 
 ### M1 — Scaffold & Validation
 
@@ -982,12 +985,12 @@ M0 Delivery Approval
 
 ## Cross-cutting risks
 
-### Risk: delivery starts before approval
+### Risk: delivery starts before merge
 
 Mitigation:
 
 - Keep this PR documentation-only.
-- Require CEO and CTO approval before PR 1.
+- Require this PR to be marked ready and merged before PR 1.
 
 ### Risk: product rules are duplicated across domain, UI, and persistence
 
@@ -1043,7 +1046,7 @@ Review for product fit:
 - Are MVP exclusions preserved?
 - Are Today, scoring, and weekly review sequenced in a way that validates real founder use?
 - Does the delegation plan preserve clear accountability while keeping user-facing outcomes reviewable?
-- Are gates strict enough to prevent feature implementation before approval?
+- Are gates strict enough to prevent feature implementation before this PR is merged?
 
 ### CTO review
 
@@ -1058,6 +1061,6 @@ Review for technical fit:
 
 ## Approval checklist
 
-- CEO approves the delivery milestones, product gates, and non-scope boundaries.
-- CTO approves the technical sequence, tests, dependencies, and risk mitigations.
-- Implementation remains blocked until both approvals are recorded.
+- CEO approved the delivery milestones, product gates, and non-scope boundaries.
+- CTO approved the technical sequence, tests, dependencies, and risk mitigations.
+- Implementation remains blocked until this PR is marked ready and merged.

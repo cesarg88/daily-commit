@@ -8,7 +8,7 @@ The detailed delivery breakdown for the approved Technical Strategy is documente
 
 - `docs/04-delivery/delivery-breakdown.md`
 
-Implementation remains blocked until the Delivery Breakdown is approved by the CEO and CTO.
+Implementation remains blocked until the accepted Delivery Breakdown PR is marked ready and merged.
 
 ---
 
@@ -40,7 +40,7 @@ Choose and document the technical foundation.
 
 ### Notes
 
-No product feature implementation or project scaffold should start until the Delivery Breakdown is approved by the CEO and CTO.
+No product feature implementation or project scaffold should start until the accepted Delivery Breakdown PR is marked ready and merged.
 
 After approval, create the minimal scaffold in a separate PR.
 

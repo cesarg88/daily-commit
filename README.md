@@ -20,7 +20,7 @@ The goal is to create a personal, portable, score-based daily board that helps a
 
 Delivery Planning / Implementation Proposal.
 
-Product discovery, MVP definition, and Technical Strategy are complete. Product implementation must not begin until the Delivery Breakdown is approved by the CEO and CTO.
+Product discovery, MVP definition, Technical Strategy, and Delivery Breakdown are approved. Product implementation must not begin until the Delivery Breakdown PR is marked ready and merged.
 
 ## Documentation
 
