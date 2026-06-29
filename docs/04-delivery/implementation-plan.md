@@ -208,18 +208,36 @@ This phase maps to PR 9 in the Delivery Breakdown.
 
 ---
 
-## Phase 7 — Day closure and weekly review
+## Phase 7 — Day closure orchestration
 
 ### Goal
 
-Finalize day outcomes automatically and review weekly performance honestly.
+Finalize day outcomes automatically.
 
 ### Deliverables
 
 - Auto-close when all base objectives are complete.
 - Auto-close at midnight.
+- Protected Vercel Cron endpoint.
+- Idempotent closure.
 - Store final score.
+- Store base score and bonus score.
 - Prevent auto-close only because bonus raises final score to 100%.
+
+### Notes
+
+This phase maps to PR 10 in the Delivery Breakdown.
+
+---
+
+## Phase 8 — Weekly review
+
+### Goal
+
+Review weekly performance honestly while showing consistency separately.
+
+### Deliverables
+
 - Monday-to-Sunday weekly view.
 - Weekly performance from scored days only.
 - Weekly consistency summary.
@@ -228,11 +246,11 @@ Finalize day outcomes automatically and review weekly performance honestly.
 
 ### Notes
 
-This phase maps to PR 10 in the Delivery Breakdown.
+This phase maps to PR 11 in the Delivery Breakdown.
 
 ---
 
-## Phase 8 — MVP hardening
+## Phase 9 — MVP hardening
 
 ### Goal
 
@@ -249,7 +267,7 @@ Prepare the MVP for real daily use.
 
 ### Notes
 
-This phase maps to PR 11 in the Delivery Breakdown.
+This phase maps to PR 12 in the Delivery Breakdown.
 
 ---
 

@@ -406,10 +406,18 @@ Recommended first PRs:
    - Support binary and numeric updates.
    - Recalculate score immediately.
 
-10. `feat: add day closure and week review`
+10. `feat: add day closure orchestration`
     - Add closure orchestration.
     - Add protected cron endpoint.
-    - Add weekly review.
+    - Store closed-day score snapshots.
+
+11. `feat: add weekly review`
+    - Add Monday-first weekly review.
+    - Calculate weekly performance from scored days only.
+    - Show weekly consistency separately.
+
+12. `chore: harden MVP for dogfooding`
+    - Add mobile usability, empty states, error states, copy review, persistence validation, and dogfooding readiness.
 
 ## Main technical risks and mitigations
 

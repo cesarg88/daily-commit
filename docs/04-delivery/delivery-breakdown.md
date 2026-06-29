@@ -41,8 +41,9 @@ This proposal does not add an application scaffold, runtime dependencies, Supaba
 | M2 — Domain Rules | PRs 2-4 | Scoring, activation, closure, and weekly rules are tested before product screens. |
 | M3 — Persistence & Access | PRs 5-6 | Supabase schema, RLS, repositories, and founder auth are verified before feature UI. |
 | M4 — Core Product Loop | PRs 7-9 | Founder can create objectives, configure a day, and execute Today. |
-| M5 — Closure & Weekly Review | PR 10 | Days close correctly and weekly review separates performance from consistency. |
-| M6 — MVP Hardening | PR 11 | MVP is ready for founder dogfooding. |
+| M5 — Day Closure Orchestration | PR 10 | Days close correctly and closed-day score snapshots are stored. |
+| M6 — Weekly Review | PR 11 | Weekly review separates performance from consistency. |
+| M7 — MVP Hardening | PR 12 | MVP is ready for founder dogfooding. |
 
 ## Milestone gates
 
@@ -122,24 +123,36 @@ Gate before M5:
 - Founder can complete the create objective -> configure day -> activate day -> update Today loop in a preview environment.
 - CEO confirms the loop still feels like a daily commitment board, not a generic task tracker.
 
-### M5 — Closure & Weekly Review
+### M5 — Day Closure Orchestration
 
 Definition of done:
 
 - Day closes when all base objectives are complete.
 - Day closes lazily after midnight when eligible.
 - Protected Vercel Cron endpoint exists.
-- Weekly review uses Monday-first weeks.
-- Weekly performance is calculated from scored days only.
-- Weekly consistency is shown separately.
+- Closure behavior is idempotent.
+- Closed-day score snapshots store `finalScore`, `baseScore`, and `bonusScore`.
 
 Gate before M6:
 
-- Closure behavior is idempotent.
-- Weekly review clearly distinguishes scored, excluded, and unconfigured days.
+- Base-completion and midnight closure paths are validated.
 - CTO confirms cron protection and closure orchestration.
 
-### M6 — MVP Hardening
+### M6 — Weekly Review
+
+Definition of done:
+
+- Weekly review uses Monday-first weeks.
+- Weekly performance is calculated from scored days only.
+- Weekly consistency is shown separately.
+- Scored, excluded, and unconfigured day states are visible.
+
+Gate before M7:
+
+- Weekly review clearly distinguishes scored, excluded, and unconfigured days.
+- CEO confirms weekly review gives an honest read of quality and consistency.
+
+### M7 — MVP Hardening
 
 Definition of done:
 
@@ -701,20 +714,19 @@ Dependencies:
 
 - Depends on PR 8.
 
-### PR 10 — `feat: add day closure and week review`
+### PR 10 — `feat: add day closure orchestration`
 
 Scope:
 
 - Add lazy closure orchestration.
 - Add protected Vercel Cron endpoint.
 - Close active days after midnight eligibility.
+- Ensure closure operations are idempotent.
 - Store closed-day score snapshots.
-- Add Monday-first weekly review.
-- Calculate weekly performance from scored days only.
-- Show weekly consistency separately.
 
 Explicit non-scope:
 
+- No weekly review.
 - No streaks.
 - No calendar heatmap.
 - No daily reflection.
@@ -724,12 +736,10 @@ Explicit non-scope:
 Expected files or areas touched:
 
 - `src/app/api/`
-- `src/app/(app)/week/`
 - `src/application/use-cases/`
-- `src/domain/week/`
 - day and score repository usage
 - Vercel cron configuration
-- tests for closure orchestration and weekly summary
+- tests for closure orchestration
 
 Required tests and validation:
 
@@ -737,19 +747,16 @@ Required tests and validation:
 - Midnight-eligible day closes lazily.
 - Cron endpoint rejects unauthorized calls.
 - Closure operation is idempotent.
-- Weekly performance uses scored days only.
-- Excluded and unconfigured days are shown separately.
-- Monday-first week range is used.
 
 Acceptance criteria:
 
 - Closed days store `finalScore`, `baseScore`, and `bonusScore`.
 - Day closure follows the accepted policy.
-- Weekly review distinguishes performance from consistency.
+- Closure can be safely retried by both lazy and scheduled triggers.
 
 CEO review focus:
 
-- Confirm weekly review gives an honest read of quality and consistency.
+- Confirm automatic closure preserves the meaning of the daily commitment.
 
 CTO review focus:
 
@@ -764,7 +771,65 @@ Dependencies:
 
 - Depends on PR 9.
 
-### PR 11 — `chore: harden MVP for dogfooding`
+### PR 11 — `feat: add weekly review`
+
+Scope:
+
+- Add Monday-first weekly review.
+- Calculate weekly performance from scored days only.
+- Show weekly consistency separately.
+- Show scored, excluded, and unconfigured day states.
+- Read closed-day score snapshots for scored days.
+
+Explicit non-scope:
+
+- No closure orchestration.
+- No cron endpoint.
+- No streaks.
+- No calendar heatmap.
+- No daily reflection.
+- No advanced analytics.
+
+Expected files or areas touched:
+
+- `src/app/(app)/week/`
+- `src/application/use-cases/`
+- `src/domain/week/`
+- day and score repository usage
+- tests for weekly summary and weekly review behavior
+
+Required tests and validation:
+
+- Weekly performance uses scored days only.
+- Excluded days do not count toward weekly performance.
+- Unconfigured days do not count toward weekly performance.
+- Weekly consistency shows scored, excluded, and unconfigured day states separately.
+- Monday-first week range is used.
+
+Acceptance criteria:
+
+- Weekly review distinguishes performance from consistency.
+- Scored, excluded, and unconfigured days are visibly distinct.
+- A high weekly score cannot imply full consistency when few days were scored.
+
+CEO review focus:
+
+- Confirm weekly review gives an honest read of quality and consistency.
+
+CTO review focus:
+
+- Confirm weekly review reuses domain weekly summary rules and closed-day snapshots.
+
+Risks and mitigations:
+
+- Risk: weekly review becomes analytics-heavy.
+- Mitigation: keep the PR limited to MVP performance, consistency, and day-state visibility.
+
+Dependencies:
+
+- Depends on PR 10.
+
+### PR 12 — `chore: harden MVP for dogfooding`
 
 Scope:
 
@@ -821,7 +886,7 @@ Risks and mitigations:
 
 Dependencies:
 
-- Depends on PR 10.
+- Depends on PR 11.
 
 ## Cross-PR dependency map
 
@@ -836,8 +901,9 @@ M0 Delivery Approval
               -> PR 7 Objective Catalog
                 -> PR 8 Day Configuration
                   -> PR 9 Today Execution
-                    -> PR 10 Day Closure + Week Review
-                      -> PR 11 MVP Hardening
+                    -> PR 10 Day Closure Orchestration
+                      -> PR 11 Weekly Review
+                        -> PR 12 MVP Hardening
 ```
 
 ## Cross-cutting risks

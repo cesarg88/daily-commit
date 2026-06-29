@@ -181,11 +181,11 @@ Make Daily Commit usable during the day.
 
 ---
 
-## Milestone 9 — Day closure and weekly review
+## Milestone 9 — Day closure orchestration
 
 ### Goal
 
-Close days automatically and show weekly performance and consistency.
+Close days automatically according to product rules.
 
 ### Completion criteria
 
@@ -195,6 +195,18 @@ Close days automatically and show weekly performance and consistency.
 - Final score stored.
 - Base score and bonus score stored for closed days.
 - Bonus score alone does not trigger semantic closure.
+- Closure operation is idempotent.
+
+---
+
+## Milestone 10 — Weekly review
+
+### Goal
+
+Show weekly performance and consistency.
+
+### Completion criteria
+
 - Monday-first week.
 - Scored days listed.
 - Excluded days listed.
@@ -204,7 +216,7 @@ Close days automatically and show weekly performance and consistency.
 
 ---
 
-## Milestone 10 — MVP dogfooding
+## Milestone 11 — MVP dogfooding
 
 ### Goal
 
