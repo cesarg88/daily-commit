@@ -8,7 +8,7 @@ The approved technical strategy is documented in:
 
 - `docs/03-architecture/technical-strategy-proposal.md`
 
-Implementation must not begin until the Delivery Breakdown is approved by the CEO and CTO.
+Implementation may proceed through the accepted Delivery Breakdown PR sequence.
 
 ---
 
@@ -172,7 +172,7 @@ UI tests can wait until behavior stabilizes.
 
 - Documentation must remain in English.
 - Product behavior must be implemented in small PRs.
-- No product implementation should start before the Delivery Breakdown is approved.
+- Product implementation should proceed through the accepted Delivery Breakdown PR sequence.
 - Architecture should support future offline evaluation without making offline an MVP blocker.
 
 ---

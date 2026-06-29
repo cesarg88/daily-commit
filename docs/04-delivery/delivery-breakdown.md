@@ -2,9 +2,9 @@
 
 ## Status
 
-Proposed for CEO and CTO review.
+Accepted by CEO and CTO.
 
-Delivery implementation must not begin until this Delivery Breakdown is approved by both roles.
+PR #5 was merged on 2026-06-29. Implementation may proceed through the approved PR sequence.
 
 ## Date
 
@@ -18,9 +18,9 @@ It defines small, reviewable implementation milestones and PR-sized steps for Da
 
 ## Implementation status
 
-No product implementation has started in this proposal.
+No product implementation was added in the Delivery Breakdown PR.
 
-This proposal does not add an application scaffold, runtime dependencies, Supabase migrations, UI screens, product code, auth flows, persistence code, or domain implementation.
+The Delivery Breakdown PR did not add an application scaffold, runtime dependencies, Supabase migrations, UI screens, product code, auth flows, persistence code, or domain implementation.
 
 ## Delivery principles
 
@@ -1060,4 +1060,4 @@ Review for technical fit:
 
 - CEO approves the delivery milestones, product gates, and non-scope boundaries.
 - CTO approves the technical sequence, tests, dependencies, and risk mitigations.
-- Implementation remains blocked until both approvals are recorded.
+- CEO/CTO approval is recorded and PR #5 is merged.

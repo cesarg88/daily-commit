@@ -4,7 +4,7 @@
 
 Approved by CEO and CTO.
 
-Implementation remains blocked until the Delivery Breakdown is approved by the CEO and CTO.
+Implementation may proceed through the accepted Delivery Breakdown PR sequence.
 
 ## Date
 
@@ -486,7 +486,7 @@ Rejected because the MVP is for one real founder user. The proposal includes `us
 
 - CEO confirms the proposal preserves the product intent and MVP boundaries.
 - CTO confirms the stack, persistence, hosting, auth, closure, testing, and delivery sequence.
-- Implementation remains blocked until both approvals are recorded.
+- Implementation may proceed through the accepted Delivery Breakdown PR sequence.
 
 ## External references
 

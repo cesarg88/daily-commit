@@ -18,9 +18,9 @@ The goal is to create a personal, portable, score-based daily board that helps a
 
 ## Current Phase
 
-Delivery Planning / Implementation Proposal.
+Implementation — PR 1 Scaffold & Tooling.
 
-Product discovery, MVP definition, and Technical Strategy are complete. Product implementation must not begin until the Delivery Breakdown is approved by the CEO and CTO.
+Product discovery, MVP definition, Technical Strategy, and Delivery Breakdown are approved. Current implementation must stay within the approved PR 1 scaffold constraints.
 
 ## Documentation
 
@@ -32,3 +32,16 @@ Product discovery, MVP definition, and Technical Strategy are complete. Product 
 - `docs/05-decisions/` — architecture/product decision records
 
 Start delivery review with `docs/04-delivery/delivery-breakdown.md`.
+
+## Local Development
+
+```text
+npm install
+npm run dev
+npm run test
+npm run lint
+npm run typecheck
+npm run validate
+```
+
+Environment variable names are documented in `.env.example`. Do not commit `.env.local`.
