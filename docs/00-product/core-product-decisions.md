@@ -495,6 +495,66 @@ The Founding Engineer should implement the product through small branches and pu
 
 ---
 
+## D026 — Active days can be edited in the MVP
+
+**Status:** Accepted
+
+An active day can be edited after activation.
+
+However, editing an active day should be presented as changing the original commitment, not as a neutral progress update.
+
+### Implications
+
+- The UI should warn or clearly signal that the commitment is being changed.
+- The resulting configuration must still be valid.
+- The MVP does not need to keep a change history.
+
+---
+
+## D027 — A day requires at least 3 base objectives before activation
+
+**Status:** Accepted
+
+A configured day must have at least 3 base objectives before it can be activated.
+
+### Rationale
+
+This prevents weak configurations where one small objective can represent the entire day.
+
+### Implications
+
+- The day configuration screen must validate the minimum count.
+- Invalid configurations cannot be activated.
+
+---
+
+## D028 — Bonus objectives compensate globally in the MVP
+
+**Status:** Accepted
+
+Bonus objectives apply to the daily score as a whole.
+
+They do not compensate specific base objectives in the MVP.
+
+### Implications
+
+- Objective-specific bonus compensation rules are out of scope.
+- Incomplete base objectives remain visible even when bonus compensation improves the final score.
+
+---
+
+## D029 — Weeks start on Monday
+
+**Status:** Accepted
+
+Weekly views and weekly calculations use Monday as the first day of the week.
+
+### Rationale
+
+The founder is based in Spain, where Monday-first weekly rhythm is expected.
+
+---
+
 ## Deferred decisions
 
 The following decisions are intentionally deferred.
@@ -532,6 +592,18 @@ Apple Health, Apple Watch, Yazio, and other integrations are outside MVP scope.
 **Status:** Deferred
 
 The product still needs to define thresholds for labels such as poor, acceptable, good, and excellent day.
+
+### Bonus limits
+
+**Status:** Deferred
+
+The MVP does not define a maximum recommended or enforced weight for bonus objectives.
+
+### Non-compensable base objectives
+
+**Status:** Deferred
+
+The MVP does not define base objectives that cannot be compensated by bonus objectives.
 
 ---
 
