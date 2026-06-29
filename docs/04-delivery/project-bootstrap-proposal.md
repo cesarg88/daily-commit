@@ -1,8 +1,8 @@
 # Project Bootstrap Proposal - Daily Commit
 
-**Status:** Approved
+**Status:** Awaiting CEO / CTO approval
 
-**Approval date:** 2026-06-29
+**Proposal date:** 2026-06-29
 
 ## Product Summary
 
@@ -17,6 +17,8 @@ No application implementation exists yet. The repository is currently documentat
 Current product truth is captured in product discovery, core decisions, product principles, MVP scope, user flows, user stories, acceptance criteria, information architecture, and screen responsibility documents.
 
 There are no open pull requests as of adoption inspection. The remote `origin/docs/product-foundation` branch contained useful product foundation documentation and has been reconciled into this adoption branch while preserving onboarding.
+
+Canonical PEOS bootstrap, workflow, template, and Cursor assets were checked against `cesarg88/product-engineering-os` at `4f524147bf280182abf3ae6a8da497d5540f830f`.
 
 ## Architecture Summary
 
@@ -70,7 +72,7 @@ Incomplete:
 
 ## Missing PEOS Adoption Items
 
-Resolved by adoption work:
+Present in this adoption branch:
 
 - PEOS bootstrap assets.
 - PEOS docs.
@@ -84,6 +86,7 @@ Still needed before product implementation:
 
 - technical architecture proposal
 - approved implementation proposal
+- CEO / CTO approval of this Project Bootstrap Proposal
 
 ## Recommended First Implementation Milestone
 
@@ -98,12 +101,15 @@ Scope:
 - testing strategy
 - first implementation proposal
 
-No product code should be written until the implementation proposal is approved.
+No product code should be written until this Project Bootstrap Proposal and a later implementation proposal are approved.
 
 ## High-Level Implementation Plan
 
-1. Complete PEOS adoption.
-2. Approve technical architecture.
-3. Draft first implementation proposal.
-4. Implement approved scope in small branches and pull requests.
-5. Review product behavior, architecture, tests, and documentation before merge.
+1. CEO / CTO review this Project Bootstrap Proposal.
+2. After approval, mark Milestone 0 adoption complete.
+3. Approve technical architecture.
+4. Draft first implementation proposal.
+5. Implement approved scope in small branches and pull requests.
+6. Review product behavior, architecture, tests, and documentation before merge.
+
+Awaiting CEO / CTO approval.
