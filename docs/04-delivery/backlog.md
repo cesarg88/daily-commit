@@ -1,6 +1,6 @@
 # Backlog - Daily Commit
 
-## Ready For Adoption Work
+## Completed Adoption Work
 
 - Adopt PEOS bootstrap, docs, templates, and agent assets.
 - Preserve `docs/onboarding.md` as the project entry point.

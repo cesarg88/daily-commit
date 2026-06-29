@@ -4,18 +4,16 @@ Daily Commit follows PEOS. Product code starts only after an implementation prop
 
 ## Current Phase
 
-PEOS adoption and product foundation consolidation.
+Technical foundation planning.
 
 ## Sequence
 
-1. Complete PEOS adoption.
-2. Reconcile product foundation documentation.
-3. Approve the project bootstrap state.
-4. Produce a technical architecture proposal.
-5. Approve technical strategy.
-6. Produce the first implementation proposal.
-7. Implement approved scope in small reviewable changes.
-8. Review product behavior, architecture, tests, and documentation before merge.
+1. Produce a technical architecture proposal.
+2. Approve technical strategy.
+3. Produce the first implementation proposal.
+4. Approve the implementation proposal.
+5. Implement approved scope in small reviewable changes.
+6. Review product behavior, architecture, tests, and documentation before merge.
 
 ## First Implementation Candidate
 

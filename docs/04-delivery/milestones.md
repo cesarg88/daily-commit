@@ -2,7 +2,7 @@
 
 ## Milestone 0 - PEOS Adoption And Product Foundation
 
-**Status:** In progress
+**Status:** Complete
 
 ## Goal
 
