@@ -175,13 +175,16 @@ Responsibilities:
 - Assign weight to base objectives.
 - Support bonus objectives.
 - Validate that base objectives sum to 100%.
+- Require at least 3 base objectives before a day can be activated.
 - Activate the day once configured.
+- Allow active days to be edited, while making it clear that this changes the original commitment.
 - Mark binary objectives as completed or not completed.
 - Update numeric objectives with partial progress.
 - Calculate proportional contribution for numeric objectives.
 - Calculate base score.
 - Calculate bonus score.
 - Calculate final daily score capped at 100%.
+- Let bonus objectives compensate globally in the MVP.
 - Show the Today screen as the main execution surface.
 - Allow progress updates directly from the Today screen.
 - Automatically close the day when all base objectives are completed.
@@ -189,6 +192,7 @@ Responsibilities:
 - Show a basic weekly summary.
 - Calculate weekly performance based only on scored days.
 - Show weekly consistency separately from weekly performance.
+- Use Monday as the first day of the week.
 - Persist data reliably.
 - Work well on mobile web.
 
@@ -224,6 +228,8 @@ Responsibilities:
 - Automatic health integrations.
 - Predefined day templates.
 - Mandatory daily reflection.
+- Change history for active day edits.
+- Objective-specific bonus compensation rules.
 
 ---
 
@@ -252,6 +258,8 @@ The user selects which objectives apply today.
 
 Base objectives must sum to exactly 100%.
 
+A day requires at least 3 base objectives before it can be activated. This prevents weak configurations where one small objective can represent the entire day.
+
 Bonus objectives are optional and may make the total available score greater than 100%, but the final score is capped at 100%.
 
 Example:
@@ -279,6 +287,8 @@ Bonus objective:
 Once the day is configured and valid, the user activates it.
 
 After activation, the product shifts from planning mode to execution mode.
+
+An active day can still be edited in the MVP, but editing it should be presented as changing the original commitment rather than as a neutral update.
 
 ---
 
@@ -343,6 +353,8 @@ The user reviews:
 - Scores per day.
 
 Weekly performance and weekly consistency must be shown separately.
+
+Weeks start on Monday.
 
 ---
 
@@ -412,6 +424,8 @@ baseScore = sum(base objective contributions)
 
 Bonus objectives are optional and can compensate for missed base points.
 
+In the MVP, bonus compensation is global. Bonus points apply to the daily score as a whole, not to specific base objectives.
+
 ```text
 bonusScore = sum(bonus objective contributions)
 ```
@@ -462,6 +476,8 @@ The day is being configured but is not active yet.
 
 The day has been configured and is in execution mode.
 
+An active day can be edited in the MVP, but the experience should make it clear that the original commitment is being changed.
+
 ### Closed
 
 The day has ended and has a final score.
@@ -481,6 +497,8 @@ Excluded days do not count toward weekly performance, but they should be visible
 ## 15. Weekly model
 
 Daily Commit separates weekly performance from weekly consistency.
+
+Weeks start on Monday.
 
 ### 15.1 Weekly performance
 
@@ -547,6 +565,7 @@ It should support:
 - Setting objective weights.
 - Marking objectives as base or bonus.
 - Validating that base objectives sum to 100%.
+- Validating that at least 3 base objectives are selected.
 - Activating the day.
 - Marking the day as excluded.
 
@@ -653,25 +672,24 @@ Offline support, integrations, streaks, and analytics could distract from valida
 
 ---
 
-## 20. Open questions
+## 20. Decision backlog
 
-1. Should an active day be editable after activation?
-2. If an active day can be edited, should the product record that the original commitment changed?
-3. Should there be a minimum number of base objectives required to activate a day?
-4. Should there be a maximum weight for bonus objectives?
-5. Should bonus objectives be allowed to compensate any base objective, or should some base objectives be non-compensable?
-6. What score thresholds define a poor, acceptable, good, or excellent day?
-7. Should unconfigured days break streaks?
-8. Should excluded days pause streaks?
-9. Should the week start on Monday?
-10. When should cross-device sync enter the roadmap?
+This section tracks remaining product questions and explicitly separates accepted MVP behavior from deferred decisions.
 
----
+### Decided for MVP
 
-## 21. Recommended next step
+- Active days can be edited, but the UI must make it clear that editing changes the original commitment.
+- The MVP does not need to record a change history when an active day is edited.
+- A day requires at least 3 base objectives before it can be activated.
+- Bonus objectives compensate globally in the MVP, not against specific base objectives.
+- Weeks start on Monday.
 
-The next product document should be:
+### Deferred
 
-`docs/00-product/core-product-decisions.md`
-
-That document should capture accepted product decisions in a concise decision-log format so that future implementation work has a stable reference.
+- Define whether some base objectives should be non-compensable by bonus objectives.
+- Define a maximum recommended or enforced weight for bonus objectives.
+- Define score thresholds for labels such as poor, acceptable, good, and excellent day.
+- Define streak rules.
+- Decide whether unconfigured days break streaks.
+- Decide whether excluded days pause streaks.
+- Decide when cross-device sync enters the roadmap.
