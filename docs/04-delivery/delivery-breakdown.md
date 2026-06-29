@@ -31,6 +31,79 @@ This proposal does not add an application scaffold, runtime dependencies, Supaba
 - Add tests in the same PR as the behavior they protect.
 - Preserve the single-user founder MVP.
 - Preserve the explicit MVP exclusions: no AI, no integrations, no offline-first behavior, no templates, no social features, and no multi-profile UX.
+- Keep the Lead Orchestrator accountable for scope control, non-scope control, handoff quality, validation expectations, PR clarity, risk visibility, and readiness for CEO/CTO review.
+- Treat internal agent allocation as an orchestration detail unless it changes approved scope, creates material risk, or affects reviewability.
+
+## Lead Orchestrator execution model
+
+The Lead Orchestrator owns delivery coordination for approved work.
+
+For each approved milestone or implementation PR, the Lead Orchestrator decides the execution model based on:
+
+- complexity: how many layers, files, flows, or systems are affected;
+- risk: whether the work can break product invariants, data privacy, persistence integrity, auth boundaries, closure timing, or review clarity;
+- required expertise: whether the work needs focused domain, persistence, auth, UI, operations, or testing expertise;
+- reviewability: whether the work can remain understandable as one external PR, or needs internal specialist handoffs while preserving a small public review unit.
+
+The Lead Orchestrator does not own product decisions, architecture decisions, approval gates, merge authority, or final CEO/CTO acceptance.
+
+### Execution model options
+
+| Model | When to use it | Lead Orchestrator accountability |
+| --- | --- | --- |
+| Implement directly | Low complexity, low risk, narrow file surface, straightforward validation. | Keep the PR small, document scope/non-scope, run validation, and prepare the PR for CEO/CTO review. |
+| Delegate to one specialized agent | A PR needs focused expertise but remains one coherent review unit. | Provide a precise handoff, constrain scope, review output, ensure tests/docs are updated, and own final PR clarity. |
+| Split internal work across specialized agents | A PR has multiple independent internal workstreams but should remain one external delivery unit. | Coordinate handoffs, reconcile outputs, prevent overlap, verify integration, and keep review surface coherent. |
+| Request focused specialist review | The implementation is done or nearly done, but a high-risk area needs expert scrutiny. | Define review questions, capture tradeoffs, decide follow-up actions, and ensure readiness for CEO/CTO review. |
+
+### Breakdown and delegation rules
+
+- The external delivery unit remains the approved milestone or pull request.
+- Internal delegation must not expand scope beyond the approved PR.
+- Any delegated task must include explicit scope, explicit non-scope, expected files or areas touched, required tests, validation evidence, risks, and handoff notes.
+- A specialized agent may implement narrowly scoped work, but does not own product decisions, architecture decisions, approval gates, orchestration decisions, or merge authority.
+- The Lead Orchestrator reviews delegated output before it reaches CEO/CTO review.
+- If delegation creates material risk, changes scope, or makes review harder, the Lead Orchestrator must surface that tradeoff and adjust the delivery plan before proceeding.
+
+### Initial execution model by implementation PR
+
+| PR | External delivery unit | Execution model | Why this model | Expected delegation or review |
+| --- | --- | --- | --- | --- |
+| 1 | Scaffold & Tooling | Implement directly with CTO review focus. | Narrow setup work; low product risk; reviewability depends on keeping the scaffold minimal. | Request CTO review on scripts, CI shape, env docs, and absence of product code. |
+| 2 | Domain Scoring Rules | Delegate to one domain rules specialist, then Lead Orchestrator review. | Scoring is core product behavior and benefits from focused test design. | Handoff includes binary, numeric, base, bonus, and capped final score cases. |
+| 3 | Day Validation & Closure Rules | Delegate to one domain rules specialist with focused CTO review. | Activation and closure rules carry product-invariant and date-handling risk. | Handoff includes base total, minimum base count, numeric validation, base-completion closure, midnight eligibility, and bonus non-closure. |
+| 4 | Weekly Summary Rules | Implement directly or delegate to the same domain rules specialist depending on PR 2-3 continuity. | Pure domain work with clear tests; continuity with previous domain rules may reduce risk. | Request focused CEO review on performance vs consistency semantics. |
+| 5 | Persistence Foundation | Delegate to one persistence/RLS specialist and request focused CTO security review. | RLS, ownership policies, migrations, and unauthorized-access evidence are high-risk technical areas. | Handoff must include schema, repository interfaces, RLS checks, and service-role boundary validation. |
+| 6 | Authentication Shell | Delegate to one auth specialist or pair with persistence specialist. | Auth depends on Supabase/RLS boundaries and route protection; product UX must stay minimal. | Request CTO review on allowlist, protected routes, server/client Supabase usage, and non-allowlisted access. |
+| 7 | Objective Catalog | Delegate to one product UI/application specialist. | The PR crosses UI, forms, use cases, and persistence but remains a coherent product slice. | Lead Orchestrator verifies MVP field limits and prevents generic task-manager expansion. |
+| 8 | Day Configuration | Split internal work only if needed between form UX and application validation integration. | Highest form complexity in the MVP; must preserve deliberate commitment without duplicating domain validation. | Lead Orchestrator owns integration, warning copy, validation mapping, and review coherence. |
+| 9 | Today Execution | Split internal work only if needed between interaction UI and score/update orchestration. | Today is the primary product surface and must keep score honest while staying low-friction. | Request CEO review on product feel and CTO review on reuse of domain scoring. |
+| 10 | Day Closure Orchestration | Delegate to one closure/operations specialist and request focused CTO review. | Lazy closure, cron protection, idempotency, and score snapshots are operationally risky. | Handoff must include retry behavior, protected endpoint validation, and no duplicated scoring implementation. |
+| 11 | Weekly Review | Implement directly or delegate to one product UI/application specialist. | Weekly review is user-facing but bounded by already-tested domain calculations. | Request CEO review on honest performance/consistency presentation. |
+| 12 | MVP Hardening | Split internal work across focused specialists only for clearly separable checks. | Hardening touches mobile usability, empty states, error states, copy, persistence validation, and docs. | Lead Orchestrator consolidates findings and prevents hardening from becoming feature expansion. |
+
+### Handoff checklist for delegated work
+
+Every delegated implementation or review task must include:
+
+- approved source documents to read;
+- exact PR scope;
+- explicit non-scope;
+- expected files or areas touched;
+- required tests and validation evidence;
+- known risks and tradeoffs;
+- expected handoff format;
+- criteria for returning the work to the Lead Orchestrator.
+
+### Specialist review triggers
+
+The Lead Orchestrator should request focused specialist review when:
+
+- a change affects scoring, activation, closure, or weekly calculation semantics;
+- a change affects Supabase RLS, auth, service-role boundaries, or route protection;
+- a change affects cron, idempotency, timezone behavior, or closed-day snapshots;
+- a UI flow risks weakening the daily commitment model;
+- a PR becomes large enough that CEO/CTO review clarity is at risk.
 
 ## Proposed delivery sequence
 
@@ -54,6 +127,7 @@ Definition of done:
 - Delivery milestones are documented.
 - Implementation PR sequence is documented.
 - Each implementation PR has scope, explicit non-scope, expected files or areas touched, required tests, acceptance criteria, review focus, risks, mitigations, and dependencies.
+- Lead Orchestrator execution model, delegation criteria, and handoff expectations are documented.
 - CEO and CTO review instructions are clear.
 - The documentation confirms that implementation remains blocked.
 
@@ -968,6 +1042,7 @@ Review for product fit:
 - Does the sequence protect the daily commitment board concept?
 - Are MVP exclusions preserved?
 - Are Today, scoring, and weekly review sequenced in a way that validates real founder use?
+- Does the delegation plan preserve clear accountability while keeping user-facing outcomes reviewable?
 - Are gates strict enough to prevent feature implementation before approval?
 
 ### CTO review
@@ -979,6 +1054,7 @@ Review for technical fit:
 - Are tests required at the right layer?
 - Are Supabase, RLS, auth, cron, and environment concerns isolated to the correct PRs?
 - Is each PR small enough to review independently?
+- Does the proposed execution model assign specialist attention to the right risk areas without blurring architecture ownership?
 
 ## Approval checklist
 
