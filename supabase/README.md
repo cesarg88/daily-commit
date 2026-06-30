@@ -23,8 +23,12 @@ The service-role key must remain server-only.
 
 RLS validation checks live in `supabase/validation/rls-checks.sql`.
 
-Run those checks against a local or preview Supabase database after applying the migration. They are designed to validate:
+Run `npm run validate:persistence` to apply the migration in a local validation database and execute the persistence checks end to end.
+
+The SQL checks are designed to validate:
 
 - anonymous access denial;
 - owner-only read and write access;
 - rejection of inserts and updates that try to write another user's `user_id`.
+
+`npm run validate:persistence` requires a local PostgreSQL runtime at `/opt/homebrew/opt/postgresql@17/bin`.
