@@ -7,7 +7,7 @@ export type RouteProtectionDecision =
       location: string;
     };
 
-const protectedRoutePrefixes = ["/app", "/objectives"];
+const protectedRoutePrefixes = ["/app", "/day", "/objectives"];
 
 export function decideRouteProtection(
   pathname: string,

@@ -19,6 +19,8 @@ function getSafeNext(value: FormDataEntryValue | null): string {
     value === "/app" ||
     value.startsWith("/app/") ||
     value.startsWith("/app?") ||
+    value === "/day" ||
+    value.startsWith("/day?") ||
     value === "/objectives" ||
     value.startsWith("/objectives?")
   ) {
