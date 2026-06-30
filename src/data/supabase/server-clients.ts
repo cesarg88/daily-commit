@@ -27,6 +27,26 @@ export function createSupabaseServerClient(): DatabaseClient {
   );
 }
 
+export function createSupabaseAuthenticatedServerClient(
+  accessToken: string,
+): DatabaseClient {
+  return createClient<Database>(
+    getRequiredEnv("NEXT_PUBLIC_SUPABASE_URL"),
+    getRequiredEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+      global: {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    },
+  );
+}
+
 export function createSupabaseServiceRoleClient(): DatabaseClient {
   return createClient<Database>(
     getRequiredEnv("NEXT_PUBLIC_SUPABASE_URL"),
