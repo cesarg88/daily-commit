@@ -3,7 +3,12 @@ import { getTodayExecution, updateTodayProgress } from "./today-execution";
 import type {
   DayRepository,
   PersistedDayRecord,
+  PersistedUserDayRecord,
 } from "../ports/day-repository";
+import type {
+  ClosedDayScoreSnapshot,
+  ScoreSnapshotRepository,
+} from "../ports/score-snapshot-repository";
 import type { Day } from "../../domain/day/day";
 import {
   createBinaryDailyObjective,
@@ -12,14 +17,27 @@ import {
 
 function createDayRepository(
   initialRecord: PersistedDayRecord | null,
-): DayRepository & { savedRecords: PersistedDayRecord[] } {
+  activeRecords: PersistedUserDayRecord[] = [],
+): DayRepository & {
+  savedRecords: PersistedDayRecord[];
+  updatedDays: Day[];
+} {
   let record = initialRecord;
   const savedRecords: PersistedDayRecord[] = [];
+  const updatedDays: Day[] = [];
 
   return {
     savedRecords,
+    updatedDays,
     async getByDate() {
       return record;
+    },
+    async listActiveBeforeDate(beforeDate: string, userId?: string) {
+      return activeRecords.filter(
+        (activeRecord) =>
+          activeRecord.day.date < beforeDate &&
+          (!userId || activeRecord.userId === userId),
+      );
     },
     async listByDateRange() {
       return record ? [record.day] : [];
@@ -30,11 +48,34 @@ function createDayRepository(
       return nextRecord;
     },
     async updateDay(_userId: string, day: Day) {
-      record = {
-        day,
-        objectives: record?.objectives ?? [],
-      };
+      updatedDays.push(day);
       return day;
+    },
+  };
+}
+
+function createScoreSnapshotRepository(): ScoreSnapshotRepository & {
+  upserts: ClosedDayScoreSnapshot[];
+} {
+  const snapshots = new Map<string, ClosedDayScoreSnapshot>();
+  const upserts: ClosedDayScoreSnapshot[] = [];
+
+  return {
+    upserts,
+    async getByDayId(_userId: string, dayId: string) {
+      return snapshots.get(dayId) ?? null;
+    },
+    async listByDayIds(_userId: string, dayIds: string[]) {
+      return dayIds.flatMap((dayId) => {
+        const snapshot = snapshots.get(dayId);
+
+        return snapshot ? [snapshot] : [];
+      });
+    },
+    async upsert(_userId: string, snapshot: ClosedDayScoreSnapshot) {
+      snapshots.set(snapshot.dayId, snapshot);
+      upserts.push(snapshot);
+      return snapshot;
     },
   };
 }
@@ -78,6 +119,7 @@ describe("today execution use cases", () => {
         isCompleted: true,
       },
       repository,
+      createScoreSnapshotRepository(),
       new Date("2026-07-01T10:00:00.000Z"),
     );
 
@@ -125,6 +167,7 @@ describe("today execution use cases", () => {
         currentValue: 5,
       },
       repository,
+      createScoreSnapshotRepository(),
       new Date("2026-07-01T10:00:00.000Z"),
     );
 
@@ -160,6 +203,7 @@ describe("today execution use cases", () => {
           }),
         ]),
       ),
+      createScoreSnapshotRepository(),
     );
 
     expect(model.score).toEqual({
@@ -195,6 +239,7 @@ describe("today execution use cases", () => {
           }),
         ]),
       ),
+      createScoreSnapshotRepository(),
     );
 
     expect(model.score).toEqual({
@@ -213,7 +258,7 @@ describe("today execution use cases", () => {
     ]);
   });
 
-  it("auto-closes the day when the last base objective is completed", async () => {
+  it("auto-closes the day with a score snapshot when the last base objective is completed", async () => {
     const repository = createDayRepository(
       activeDayRecord([
         createBinaryDailyObjective({
@@ -236,6 +281,7 @@ describe("today execution use cases", () => {
         }),
       ]),
     );
+    const snapshotRepository = createScoreSnapshotRepository();
 
     const result = await updateTodayProgress(
       "user-1",
@@ -246,6 +292,7 @@ describe("today execution use cases", () => {
         isCompleted: true,
       },
       repository,
+      snapshotRepository,
       new Date("2026-07-01T10:00:00.000Z"),
     );
 
@@ -268,5 +315,57 @@ describe("today execution use cases", () => {
       state: "closed",
       closedAt: "2026-07-01T10:00:00.000Z",
     });
+    expect(snapshotRepository.upserts).toEqual([
+      {
+        dayId: "day-1",
+        finalScore: 100,
+        baseScore: 100,
+        bonusScore: 0,
+        calculatedAt: "2026-07-01T10:00:00.000Z",
+      },
+    ]);
+  });
+
+  it("lazily closes earlier active days before loading Today", async () => {
+    const repository = createDayRepository(null, [
+      {
+        userId: "user-1",
+        day: {
+          id: "yesterday",
+          date: "2026-07-01",
+          state: "active",
+        },
+        objectives: [
+          createBinaryDailyObjective({
+            id: "base-1",
+            kind: "base",
+            weight: 100,
+            isCompleted: false,
+          }),
+        ],
+      },
+    ]);
+    const snapshotRepository = createScoreSnapshotRepository();
+
+    await getTodayExecution(
+      "user-1",
+      "2026-07-02",
+      repository,
+      snapshotRepository,
+      new Date("2026-07-01T22:30:00.000Z"),
+    );
+
+    expect(repository.updatedDays).toEqual([
+      expect.objectContaining({
+        id: "yesterday",
+        state: "closed",
+      }),
+    ]);
+    expect(snapshotRepository.upserts).toEqual([
+      expect.objectContaining({
+        dayId: "yesterday",
+        finalScore: 0,
+      }),
+    ]);
   });
 });

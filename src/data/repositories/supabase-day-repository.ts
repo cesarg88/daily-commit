@@ -1,6 +1,7 @@
 import type {
   DayRepository,
   PersistedDayRecord,
+  PersistedUserDayRecord,
 } from "../../application/ports/day-repository";
 import type {
   DailyObjective,
@@ -11,6 +12,7 @@ import type { DatabaseClient } from "../supabase/client.types";
 import { requireData, requireNoError } from "./supabase-repository-utils";
 
 const DAY_COLUMNS = "id, date, state, closed_at";
+const USER_DAY_COLUMNS = "id, user_id, date, state, closed_at";
 
 const DAILY_OBJECTIVE_COLUMNS =
   "id, objective_id, name_snapshot, type, kind, weight, target_value, current_value, unit, is_completed";
@@ -20,6 +22,10 @@ interface DayRowProjection {
   date: string;
   state: Day["state"];
   closed_at: string | null;
+}
+
+interface UserDayRowProjection extends DayRowProjection {
+  user_id: string;
 }
 
 function mapDayRowToDomain(row: DayRowProjection): Day {
@@ -93,6 +99,23 @@ function mapDailyObjectiveToInsertRow(
 export class SupabaseDayRepository implements DayRepository {
   constructor(private readonly client: DatabaseClient) {}
 
+  private async getObjectivesForDay(
+    userId: string,
+    dayId: string,
+  ): Promise<DailyObjective[]> {
+    const objectiveRows = await requireData(
+      this.client
+        .from("daily_objectives")
+        .select(DAILY_OBJECTIVE_COLUMNS)
+        .eq("user_id", userId)
+        .eq("day_id", dayId)
+        .order("created_at", { ascending: true }),
+      "Failed to fetch daily objectives",
+    );
+
+    return objectiveRows.map(mapDailyObjectiveRowToDomain);
+  }
+
   async getByDate(
     userId: string,
     date: string,
@@ -112,20 +135,39 @@ export class SupabaseDayRepository implements DayRepository {
       return null;
     }
 
-    const objectiveRows = await requireData(
-      this.client
-        .from("daily_objectives")
-        .select(DAILY_OBJECTIVE_COLUMNS)
-        .eq("user_id", userId)
-        .eq("day_id", data.id)
-        .order("created_at", { ascending: true }),
-      "Failed to fetch daily objectives",
-    );
-
     return {
       day: mapDayRowToDomain(data),
-      objectives: objectiveRows.map(mapDailyObjectiveRowToDomain),
+      objectives: await this.getObjectivesForDay(userId, data.id),
     };
+  }
+
+  async listActiveBeforeDate(
+    beforeDate: string,
+    userId?: string,
+  ): Promise<PersistedUserDayRecord[]> {
+    let query = this.client
+      .from("days")
+      .select(USER_DAY_COLUMNS)
+      .eq("state", "active")
+      .lt("date", beforeDate)
+      .order("date", { ascending: true });
+
+    if (userId) {
+      query = query.eq("user_id", userId);
+    }
+
+    const rows: UserDayRowProjection[] = await requireData(
+      query,
+      "Failed to list active days before date",
+    );
+
+    return Promise.all(
+      rows.map(async (row) => ({
+        userId: row.user_id,
+        day: mapDayRowToDomain(row),
+        objectives: await this.getObjectivesForDay(row.user_id, row.id),
+      })),
+    );
   }
 
   async listByDateRange(

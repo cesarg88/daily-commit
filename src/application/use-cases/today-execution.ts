@@ -1,7 +1,11 @@
 import type { DayRepository } from "../ports/day-repository";
+import type { ScoreSnapshotRepository } from "../ports/score-snapshot-repository";
+import {
+  closeActiveDaysBeforeDate,
+  saveDayAndCloseIfEligible,
+} from "./day-closure-orchestration";
 import type { DailyObjective } from "../../domain/day/daily-objective";
 import type { Day } from "../../domain/day/day";
-import { applyDayClosurePolicy } from "../../domain/day/day-closure";
 import {
   calculateScoreBreakdown,
   type ScoreBreakdown,
@@ -133,7 +137,17 @@ export async function getTodayExecution(
   userId: string,
   date: string,
   dayRepository: DayRepository,
+  scoreSnapshotRepository: ScoreSnapshotRepository,
+  currentDateTime: Date = new Date(),
 ): Promise<TodayExecutionViewModel> {
+  await closeActiveDaysBeforeDate(
+    date,
+    dayRepository,
+    scoreSnapshotRepository,
+    currentDateTime,
+    userId,
+  );
+
   const record = await getTodayRecord(userId, date, dayRepository);
 
   return buildTodayExecutionViewModel(
@@ -147,6 +161,7 @@ export async function updateTodayProgress(
   userId: string,
   input: TodayProgressUpdateInput,
   dayRepository: DayRepository,
+  scoreSnapshotRepository: ScoreSnapshotRepository,
   currentDateTime: Date = new Date(),
 ): Promise<TodayProgressUpdateResult> {
   const record = await getTodayRecord(userId, input.date, dayRepository);
@@ -175,15 +190,18 @@ export async function updateTodayProgress(
   const updatedObjectives = record.objectives.map((objective) =>
     updateObjectiveProgress(objective, input),
   );
-  const closure = applyDayClosurePolicy(
-    record.day,
-    updatedObjectives,
+  const orchestration = await saveDayAndCloseIfEligible(
+    userId,
+    {
+      day: record.day,
+      objectives: updatedObjectives,
+    },
+    dayRepository,
+    scoreSnapshotRepository,
     currentDateTime,
   );
-  const savedRecord = await dayRepository.saveDay(userId, {
-    day: closure.day,
-    objectives: updatedObjectives,
-  });
+
+  const savedRecord = orchestration.record;
 
   return {
     status: "updated",
@@ -192,6 +210,6 @@ export async function updateTodayProgress(
       savedRecord.day,
       savedRecord.objectives,
     ),
-    didCloseDay: closure.didClose,
+    didCloseDay: orchestration.status === "closed",
   };
 }

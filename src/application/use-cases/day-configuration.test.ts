@@ -44,6 +44,9 @@ function createDayRepository(
     async getByDate() {
       return record;
     },
+    async listActiveBeforeDate() {
+      return [];
+    },
     async listByDateRange() {
       return record ? [record.day] : [];
     },

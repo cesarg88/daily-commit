@@ -4,7 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { updateTodayProgress } from "@/application/use-cases/today-execution";
 import { requireAuthenticatedFounder } from "@/data/auth/server-session";
-import { createDayRepositoryForUserSession } from "@/data/repositories/server-repositories";
+import {
+  createDayRepositoryForUserSession,
+  createScoreSnapshotRepositoryForUserSession,
+} from "@/data/repositories/server-repositories";
 import { parseTodayProgressUpdate } from "@/presentation/forms/today-progress-form";
 
 function redirectWithTodayError(message: string): never {
@@ -17,6 +20,7 @@ export async function updateTodayProgressAction(formData: FormData) {
     founder.id,
     parseTodayProgressUpdate(formData),
     createDayRepositoryForUserSession(founder.accessToken),
+    createScoreSnapshotRepositoryForUserSession(founder.accessToken),
   );
 
   if (result.status === "not-active") {
