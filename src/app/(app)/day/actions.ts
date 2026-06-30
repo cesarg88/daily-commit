@@ -11,6 +11,7 @@ import {
   createDayRepositoryForUserSession,
   createObjectiveRepositoryForUserSession,
 } from "@/data/repositories/server-repositories";
+import { getMvpTodayDate } from "@/domain/time/mvp-timezone";
 import {
   parseActiveEditAcknowledgement,
   parseSelectedDayObjectives,
@@ -21,7 +22,7 @@ function getDate(formData: FormData): string {
 
   return typeof value === "string" && value.length > 0
     ? value
-    : new Date().toISOString().slice(0, 10);
+    : getMvpTodayDate();
 }
 
 function redirectWithDayError(message: string): never {

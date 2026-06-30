@@ -4,6 +4,7 @@ import {
   createDayRepositoryForUserSession,
   createObjectiveRepositoryForUserSession,
 } from "@/data/repositories/server-repositories";
+import { getMvpTodayDate } from "@/domain/time/mvp-timezone";
 import { DayConfigurationView } from "@/presentation/components/day-configuration";
 import {
   activateDayAction,
@@ -14,10 +15,6 @@ import {
 type DayConfigurationPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function getTodayDate(): string {
-  return new Date().toISOString().slice(0, 10);
-}
 
 function getStringParam(
   value: string | string[] | undefined,
@@ -32,7 +29,7 @@ export default async function DayConfigurationPage({
   const founder = await requireAuthenticatedFounder();
   const model = await getDayConfiguration(
     founder.id,
-    getTodayDate(),
+    getMvpTodayDate(),
     createObjectiveRepositoryForUserSession(founder.accessToken),
     createDayRepositoryForUserSession(founder.accessToken),
   );
