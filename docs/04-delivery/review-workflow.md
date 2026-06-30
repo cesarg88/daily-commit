@@ -45,6 +45,25 @@ The Lead Orchestrator prepares the PR for review, gathers validation evidence, k
 
 The Lead Orchestrator does not replace CEO or CTO approval and does not own merge authority.
 
+## GitHub publishing identity
+
+The Lead Orchestrator must publish repository changes through the `Cesar-IA-Agent` GitHub App, not through the personal `cesarg88` GitHub account.
+
+Expected publishing identity:
+
+- app name: `Cesar-IA-Agent`;
+- expected PR author: `cesar-ia-agent[bot]`;
+- expected commit author email: `298223085+cesar-ia-agent[bot]@users.noreply.github.com`.
+
+Publishing rules:
+
+- Use the approved GitHub App publishing setup provided during onboarding.
+- Do not publish branches, commits, pushes, or pull requests through the personal `cesarg88` account.
+- Do not use personal GitHub credentials as a fallback.
+- Never print private keys, JWTs, installation tokens, or other credentials in logs, comments, pull requests, or documentation.
+- After opening a PR, verify the PR author is `cesar-ia-agent[bot]`.
+- If the GitHub App publishing setup is unavailable, expired, misconfigured, or unclear, stop and ask the CEO/Owner for access instead of falling back to personal credentials.
+
 ## Review inputs for each implementation PR
 
 Every implementation PR should give CEO and CTO enough context to review quickly.
