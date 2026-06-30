@@ -1,6 +1,6 @@
 # Review Workflow — Daily Commit
 
-This document defines how implementation pull requests are reviewed, how review decisions are handled, and how the Lead Orchestrator sends short transition prompts after each approved PR.
+This document defines how implementation pull requests are reviewed, how review decisions are handled, and how CEO/CTO hand off the next approved step to the Lead Orchestrator after each approved PR.
 
 ## Purpose
 
@@ -22,7 +22,8 @@ Primary review focus:
 - product intent;
 - MVP boundaries;
 - user-facing behavior;
-- scope versus explicit non-scope;
+- scope versus explicit non-s
+- cope;
 - whether the PR still feels like Daily Commit rather than a broader productivity tool.
 
 ### CTO
@@ -66,7 +67,7 @@ If CEO and CTO approve the PR:
 - the PR may be marked ready if still draft;
 - the authorized owner may merge it;
 - the Lead Orchestrator records the approval outcome when needed;
-- the next approved PR in sequence becomes the active delivery unit.
+- the next approved PR in sequence becomes the active delivery unit after CEO/CTO handoff.
 
 ### Request changes
 
@@ -94,7 +95,7 @@ If requested changes reveal material scope change, sequencing conflict, or unexp
 
 ## Transition prompts after approved PRs
 
-After an implementation PR is approved and merged, the Lead Orchestrator sends a short transition prompt for the next approved PR.
+After an implementation PR is approved and merged, CEO/CTO provide a short transition prompt to the Lead Orchestrator for the next approved PR.
 
 The transition prompt should be brief and operational. It should include:
 
