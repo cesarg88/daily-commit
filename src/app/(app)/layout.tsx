@@ -18,6 +18,7 @@ export default async function AppLayout({
         <div className="flex items-center gap-3">
           <nav className="flex items-center gap-3 text-sm font-medium">
             <Link href="/app">Home</Link>
+            <Link href="/day">Configure day</Link>
             <Link href="/objectives">Objectives</Link>
           </nav>
           <form action="/logout" method="post">

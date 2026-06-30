@@ -16,6 +16,13 @@ describe("decideRouteProtection", () => {
     });
   });
 
+  it("redirects unauthenticated day configuration access to login", () => {
+    expect(decideRouteProtection("/day", "", false)).toEqual({
+      type: "redirect",
+      location: "/login?next=%2Fday",
+    });
+  });
+
   it("allows authenticated app route access", () => {
     expect(decideRouteProtection("/app", "", true)).toEqual({
       type: "allow",
