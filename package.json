@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "node scripts/normalize-next-env.mjs",
     "start": "next start",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "pretypecheck": "node scripts/normalize-next-env.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "validate": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
