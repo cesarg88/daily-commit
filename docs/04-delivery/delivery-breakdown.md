@@ -16,6 +16,8 @@ This document translates the approved Technical Strategy into a practical MVP de
 
 It defines small, reviewable implementation milestones and PR-sized steps for Daily Commit while preserving the PEOS approval gates.
 
+Implementation PR review handling is documented in `docs/04-delivery/review-workflow.md`.
+
 ## Implementation status
 
 No product implementation was added in the Delivery Breakdown PR.

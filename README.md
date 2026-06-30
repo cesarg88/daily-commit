@@ -33,6 +33,8 @@ Product discovery, MVP definition, Technical Strategy, and Delivery Breakdown ar
 
 Start delivery review with `docs/04-delivery/delivery-breakdown.md`.
 
+Implementation PR review handling is documented in `docs/04-delivery/review-workflow.md`.
+
 ## Local Development
 
 ```text
