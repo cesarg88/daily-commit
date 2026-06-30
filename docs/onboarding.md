@@ -11,4 +11,13 @@ Start here:
 5. Read Architecture.
 6. Read ADRs.
 7. Read Milestones.
-8. Before publishing branches, commits, or pull requests, read the GitHub publishing identity rules in `docs/04-delivery/review-workflow.md`.
+
+## Lead Orchestrator publishing check
+
+Before publishing repository changes:
+
+- read the GitHub publishing identity rules in `docs/04-delivery/review-workflow.md`;
+- confirm the approved GitHub App publishing setup is available;
+- verify commits and PRs will be published as `cesar-ia-agent[bot]`;
+- do not use personal credentials as a fallback;
+- if publishing identity cannot be verified, stop and ask the CEO/Owner.
