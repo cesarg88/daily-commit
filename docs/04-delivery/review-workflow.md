@@ -49,40 +49,20 @@ The Lead Orchestrator does not replace CEO or CTO approval and does not own merg
 
 The Lead Orchestrator must publish repository changes through the `Cesar-IA-Agent` GitHub App, not through the personal `cesarg88` GitHub account.
 
-Required app details:
+Expected publishing identity:
 
-- repo: `cesarg88/daily-commit`;
 - app name: `Cesar-IA-Agent`;
-- app ID: `4181617`;
-- installation ID: `143494849`;
-- local private key path: `/Users/cesargonzalez/Documents/cesar-ia-agent.2026-06-30.private-key.pem`;
 - expected PR author: `cesar-ia-agent[bot]`;
 - expected commit author email: `298223085+cesar-ia-agent[bot]@users.noreply.github.com`.
 
 Publishing rules:
 
-- Generate a GitHub App JWT with app ID `4181617` and the local private key.
-- Exchange the JWT for an installation access token with `POST /app/installations/143494849/access_tokens`.
-- Use that installation access token for branch creation, commits, pushes, and pull request creation.
-- Do not use `gh auth token`, the GitHub connector authenticated as `cesarg88`, personal SSH credentials, or any personal GitHub token for publishing changes.
-- Never print the private key, JWT, or installation token in logs, comments, pull requests, or documentation.
-- Verify `GET /app` returns `name: Cesar-IA-Agent` and `slug: cesar-ia-agent` before publishing.
+- Use the approved GitHub App publishing setup provided during onboarding.
+- Do not publish branches, commits, pushes, or pull requests through the personal `cesarg88` account.
+- Do not use personal GitHub credentials as a fallback.
+- Never print private keys, JWTs, installation tokens, or other credentials in logs, comments, pull requests, or documentation.
 - After opening a PR, verify the PR author is `cesar-ia-agent[bot]`.
-
-If local git commits are required before pushing, set the commit identity explicitly:
-
-```text
-GIT_AUTHOR_NAME=cesar-ia-agent[bot]
-GIT_AUTHOR_EMAIL=298223085+cesar-ia-agent[bot]@users.noreply.github.com
-GIT_COMMITTER_NAME=cesar-ia-agent[bot]
-GIT_COMMITTER_EMAIL=298223085+cesar-ia-agent[bot]@users.noreply.github.com
-```
-
-Reference validation:
-
-- PR: `https://github.com/cesarg88/daily-commit/pull/10`
-- commit: `0dda69fef273f76773a10ed5816a5ce405dc23fd`
-- confirmed actor: `cesar-ia-agent[bot]`
+- If the GitHub App publishing setup is unavailable, expired, misconfigured, or unclear, stop and ask the CEO/Owner for access instead of falling back to personal credentials.
 
 ## Review inputs for each implementation PR
 
