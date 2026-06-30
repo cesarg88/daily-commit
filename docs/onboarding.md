@@ -11,3 +11,4 @@ Start here:
 5. Read Architecture.
 6. Read ADRs.
 7. Read Milestones.
+8. Before publishing branches, commits, or pull requests, read the GitHub publishing identity rules in `docs/04-delivery/review-workflow.md`.
