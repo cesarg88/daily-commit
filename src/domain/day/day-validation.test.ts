@@ -120,6 +120,33 @@ describe("validateDayActivation", () => {
     });
   });
 
+  it("does not let malformed bonus objectives block activation when the base objectives are valid", () => {
+    const objectives = [
+      createBinaryDailyObjective({ id: "base-1", weight: 30 }),
+      createBinaryDailyObjective({ id: "base-2", weight: 30 }),
+      createNumericDailyObjective({
+        id: "base-3",
+        weight: 40,
+        targetValue: 5,
+        unit: "km",
+      }),
+      createNumericDailyObjective({
+        id: "bonus-1",
+        kind: "bonus",
+        weight: 0,
+        targetValue: 0,
+        unit: "",
+      }),
+    ];
+
+    expect(validateDayActivation(objectives)).toEqual({
+      isValid: true,
+      baseObjectiveCount: 3,
+      baseWeightTotal: 100,
+      issues: [],
+    });
+  });
+
   it("returns objective-level issues alongside activation-level issues", () => {
     const objectives = [
       createBinaryDailyObjective({ id: "base-1", weight: 40 }),

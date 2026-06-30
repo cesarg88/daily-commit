@@ -70,9 +70,12 @@ export function validateDailyObjective(
 export function validateDayActivation(
   objectives: DailyObjective[],
 ): DayActivationValidationResult {
+  const baseObjectives = objectives.filter(
+    (objective) => objective.kind === "base",
+  );
   const baseObjectiveCount = calculateBaseObjectiveCount(objectives);
   const baseWeightTotal = calculateBaseWeightTotal(objectives);
-  const issues = objectives.flatMap(validateDailyObjective);
+  const issues = baseObjectives.flatMap(validateDailyObjective);
 
   if (baseObjectiveCount < 3) {
     issues.push({
