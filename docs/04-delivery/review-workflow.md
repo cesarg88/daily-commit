@@ -45,6 +45,45 @@ The Lead Orchestrator prepares the PR for review, gathers validation evidence, k
 
 The Lead Orchestrator does not replace CEO or CTO approval and does not own merge authority.
 
+## GitHub publishing identity
+
+The Lead Orchestrator must publish repository changes through the `Cesar-IA-Agent` GitHub App, not through the personal `cesarg88` GitHub account.
+
+Required app details:
+
+- repo: `cesarg88/daily-commit`;
+- app name: `Cesar-IA-Agent`;
+- app ID: `4181617`;
+- installation ID: `143494849`;
+- local private key path: `/Users/cesargonzalez/Documents/cesar-ia-agent.2026-06-30.private-key.pem`;
+- expected PR author: `cesar-ia-agent[bot]`;
+- expected commit author email: `298223085+cesar-ia-agent[bot]@users.noreply.github.com`.
+
+Publishing rules:
+
+- Generate a GitHub App JWT with app ID `4181617` and the local private key.
+- Exchange the JWT for an installation access token with `POST /app/installations/143494849/access_tokens`.
+- Use that installation access token for branch creation, commits, pushes, and pull request creation.
+- Do not use `gh auth token`, the GitHub connector authenticated as `cesarg88`, personal SSH credentials, or any personal GitHub token for publishing changes.
+- Never print the private key, JWT, or installation token in logs, comments, pull requests, or documentation.
+- Verify `GET /app` returns `name: Cesar-IA-Agent` and `slug: cesar-ia-agent` before publishing.
+- After opening a PR, verify the PR author is `cesar-ia-agent[bot]`.
+
+If local git commits are required before pushing, set the commit identity explicitly:
+
+```text
+GIT_AUTHOR_NAME=cesar-ia-agent[bot]
+GIT_AUTHOR_EMAIL=298223085+cesar-ia-agent[bot]@users.noreply.github.com
+GIT_COMMITTER_NAME=cesar-ia-agent[bot]
+GIT_COMMITTER_EMAIL=298223085+cesar-ia-agent[bot]@users.noreply.github.com
+```
+
+Reference validation:
+
+- PR: `https://github.com/cesarg88/daily-commit/pull/10`
+- commit: `0dda69fef273f76773a10ed5816a5ce405dc23fd`
+- confirmed actor: `cesar-ia-agent[bot]`
+
 ## Review inputs for each implementation PR
 
 Every implementation PR should give CEO and CTO enough context to review quickly.
