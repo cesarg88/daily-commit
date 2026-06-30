@@ -123,6 +123,24 @@ describe("score aggregation", () => {
     });
   });
 
+  it("keeps base and bonus scores separate when bonus compensation caps final score at 100", () => {
+    const [baseBinary, baseNumeric] = createObjectiveSet("base");
+    const [bonusBinary, bonusNumeric] = createObjectiveSet("bonus");
+
+    const objectives = [
+      { ...baseBinary, weight: 40, isCompleted: true },
+      { ...baseNumeric, weight: 40, currentValue: 50, targetValue: 100 },
+      { ...bonusBinary, weight: 25, isCompleted: true },
+      { ...bonusNumeric, weight: 20, currentValue: 100, targetValue: 100 },
+    ];
+
+    expect(calculateScoreBreakdown(objectives)).toEqual({
+      baseScore: 60,
+      bonusScore: 45,
+      finalScore: 100,
+    });
+  });
+
   it("preserves floating-point precision without display rounding inside the domain", () => {
     const objective = createNumericDailyObjective({
       weight: 30,
