@@ -7,9 +7,9 @@ export default function AppPage() {
       <h1 className="mt-2 text-2xl font-semibold">Signed in</h1>
       <Link
         className="mt-6 inline-block border border-neutral-300 bg-white px-3 py-2 text-sm font-medium"
-        href="/day"
+        href="/today"
       >
-        Configure day
+        Open Today
       </Link>
     </section>
   );

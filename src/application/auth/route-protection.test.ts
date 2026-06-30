@@ -23,6 +23,13 @@ describe("decideRouteProtection", () => {
     });
   });
 
+  it("redirects unauthenticated Today access to login", () => {
+    expect(decideRouteProtection("/today", "", false)).toEqual({
+      type: "redirect",
+      location: "/login?next=%2Ftoday",
+    });
+  });
+
   it("allows authenticated app route access", () => {
     expect(decideRouteProtection("/app", "", true)).toEqual({
       type: "allow",
