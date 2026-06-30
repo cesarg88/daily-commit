@@ -18,7 +18,9 @@ function getSafeNext(value: FormDataEntryValue | null): string {
   if (
     value === "/app" ||
     value.startsWith("/app/") ||
-    value.startsWith("/app?")
+    value.startsWith("/app?") ||
+    value === "/objectives" ||
+    value.startsWith("/objectives?")
   ) {
     return value;
   }

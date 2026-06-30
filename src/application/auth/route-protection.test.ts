@@ -9,6 +9,13 @@ describe("decideRouteProtection", () => {
     });
   });
 
+  it("redirects unauthenticated objective catalog access to login", () => {
+    expect(decideRouteProtection("/objectives", "", false)).toEqual({
+      type: "redirect",
+      location: "/login?next=%2Fobjectives",
+    });
+  });
+
   it("allows authenticated app route access", () => {
     expect(decideRouteProtection("/app", "", true)).toEqual({
       type: "allow",
