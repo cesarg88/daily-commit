@@ -1,6 +1,8 @@
+import Link from "next/link";
 import type { DayConfigurationViewModel } from "../../application/use-cases/day-configuration";
 import type { DailyObjective } from "../../domain/day/daily-objective";
 import type { Objective } from "../../domain/objective/objective";
+import { describeDayValidationIssues } from "../copy/day-validation-messages";
 
 type DayConfigurationViewProps = {
   model: DayConfigurationViewModel;
@@ -8,15 +10,6 @@ type DayConfigurationViewProps = {
   saveDraftAction: (formData: FormData) => void | Promise<void>;
   activateAction: (formData: FormData) => void | Promise<void>;
   excludeAction: (formData: FormData) => void | Promise<void>;
-};
-
-const issueMessages: Record<string, string> = {
-  "base-weight-total-below-100": "Base total must equal 100%.",
-  "base-weight-total-above-100": "Base total must equal 100%.",
-  "insufficient-base-objectives": "Choose at least 3 base objectives.",
-  "non-positive-weight": "Base objective weights must be greater than 0.",
-  "missing-numeric-target": "Numeric base objectives need a target.",
-  "missing-numeric-unit": "Numeric base objectives need a unit.",
 };
 
 function getSelectedObjective(
@@ -42,7 +35,7 @@ function ObjectiveOption({
 
   return (
     <article className="border border-neutral-200 bg-white p-4">
-      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_120px_120px]">
+      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_140px_140px]">
         <label className="flex items-start gap-3">
           <input
             className="mt-1"
@@ -94,10 +87,9 @@ function ValidationSummary({
 }: Readonly<{
   model: DayConfigurationViewModel;
 }>) {
-  const issueLabels = model.validation.issues.map(
-    (issue) => issueMessages[issue.code],
+  const uniqueIssueLabels = describeDayValidationIssues(
+    model.validation.issues,
   );
-  const uniqueIssueLabels = Array.from(new Set(issueLabels));
 
   return (
     <section className="border border-neutral-200 bg-white p-4">
@@ -114,13 +106,20 @@ function ValidationSummary({
       </div>
 
       {uniqueIssueLabels.length > 0 ? (
-        <ul className="mt-4 space-y-1 text-sm text-red-800">
+        <ul
+          aria-live="polite"
+          className="mt-4 space-y-1 text-sm text-red-800"
+          role="alert"
+        >
           {uniqueIssueLabels.map((label) => (
             <li key={label}>{label}</li>
           ))}
         </ul>
       ) : (
-        <p className="mt-4 text-sm text-neutral-600">Ready to activate.</p>
+        <p className="mt-4 text-sm text-neutral-600">
+          Ready to activate. Base objectives now total 100% across at least 3
+          commitments.
+        </p>
       )}
     </section>
   );
@@ -139,6 +138,10 @@ export function DayConfigurationView({
         <div>
           <p className="text-sm font-medium text-neutral-500">{model.date}</p>
           <h1 className="mt-2 text-2xl font-semibold">Configure day</h1>
+          <p className="mt-2 max-w-2xl text-sm text-neutral-600">
+            Build a deliberate board for this date. Keep base objectives honest,
+            then use bonus objectives only for extra upside.
+          </p>
         </div>
         <p className="text-sm text-neutral-600">
           {model.day?.state ?? "unconfigured"}
@@ -146,7 +149,11 @@ export function DayConfigurationView({
       </div>
 
       {errorMessage ? (
-        <p className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p
+          aria-live="polite"
+          className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+          role="alert"
+        >
           {errorMessage}
         </p>
       ) : null}
@@ -163,7 +170,10 @@ export function DayConfigurationView({
               name="acknowledgeActiveEdit"
               type="checkbox"
             />
-            <span>I understand this changes an already active commitment.</span>
+            <span>
+              I understand this changes a commitment that was already active for
+              today.
+            </span>
           </label>
         ) : null}
 
@@ -180,33 +190,39 @@ export function DayConfigurationView({
               />
             ))
           ) : (
-            <p className="border border-neutral-200 bg-white p-4 text-sm text-neutral-600">
-              Create active objectives before configuring a day.
-            </p>
+            <div className="border border-neutral-200 bg-white p-4 text-sm text-neutral-600">
+              <p>Create active objectives before configuring a day.</p>
+              <Link
+                className="mt-4 inline-block border border-neutral-300 bg-white px-3 py-2 font-medium text-neutral-900"
+                href="/objectives"
+              >
+                Open objectives
+              </Link>
+            </div>
           )}
         </section>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <button
-            className="border border-neutral-300 bg-white px-4 py-2 text-sm font-medium"
+            className="w-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium sm:w-auto"
             formAction={saveDraftAction}
             type="submit"
           >
             Save draft
           </button>
           <button
-            className="bg-neutral-950 px-4 py-2 text-sm font-medium text-white"
+            className="w-full bg-neutral-950 px-4 py-2 text-sm font-medium text-white sm:w-auto"
             formAction={activateAction}
             type="submit"
           >
-            Activate
+            Activate day
           </button>
           <button
-            className="border border-neutral-300 bg-white px-4 py-2 text-sm font-medium"
+            className="w-full border border-neutral-300 bg-white px-4 py-2 text-sm font-medium sm:w-auto"
             formAction={excludeAction}
             type="submit"
           >
-            Exclude day
+            Exclude this day
           </button>
         </div>
       </form>

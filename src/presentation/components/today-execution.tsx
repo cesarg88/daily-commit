@@ -84,7 +84,9 @@ function PendingBaseSummary({
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-sm text-neutral-600">Base complete.</p>
+        <p className="mt-3 text-sm text-neutral-600">
+          Base commitment complete.
+        </p>
       )}
     </section>
   );
@@ -152,7 +154,7 @@ function NumericObjectiveControl({
         />
       </label>
       <button
-        className="border border-neutral-300 bg-white px-3 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full border border-neutral-300 bg-white px-3 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
         disabled={disabled}
         formAction={updateProgressAction}
         type="submit"
@@ -255,16 +257,32 @@ function EmptyToday({
 }: Readonly<{
   state: string;
 }>) {
+  const title =
+    state === "excluded" ? "This day is excluded" : "No active commitment";
+  const detail =
+    state === "draft"
+      ? "Finish the day configuration and activate it before using Today."
+      : state === "excluded"
+        ? "Excluded days stay out of weekly performance. You can still configure a fresh commitment for the next day."
+        : "Configure today or mark it as excluded before you start tracking progress.";
+
   return (
     <section className="border border-neutral-200 bg-white p-5">
       <p className="text-sm font-medium text-neutral-500">Today is {state}</p>
-      <h2 className="mt-2 text-xl font-semibold">No active commitment</h2>
+      <h2 className="mt-2 text-xl font-semibold">{title}</h2>
+      <p className="mt-3 max-w-xl text-sm text-neutral-600">{detail}</p>
       <div className="mt-5 flex flex-wrap gap-3">
         <Link
           className="bg-neutral-950 px-4 py-2 text-sm font-medium text-white"
           href="/day"
         >
           Configure today
+        </Link>
+        <Link
+          className="border border-neutral-300 bg-white px-4 py-2 text-sm font-medium"
+          href="/objectives"
+        >
+          Review objectives
         </Link>
       </div>
     </section>
@@ -284,18 +302,33 @@ export function TodayExecutionView({
         <div>
           <p className="text-sm font-medium text-neutral-500">{model.date}</p>
           <h1 className="mt-2 text-2xl font-semibold">Today</h1>
+          <p className="mt-2 max-w-2xl text-sm text-neutral-600">
+            Update progress quickly, but keep the commitment honest. Bonus work
+            can lift the score, yet incomplete base objectives still stay
+            visible here.
+          </p>
         </div>
         <p className="text-sm text-neutral-600">{state}</p>
       </div>
 
       {errorMessage ? (
-        <p className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p
+          aria-live="polite"
+          className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+          role="alert"
+        >
           {errorMessage}
         </p>
       ) : null}
 
       {model.day?.state === "active" || model.day?.state === "closed" ? (
         <>
+          {model.day.state === "closed" ? (
+            <p className="border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-600">
+              This day is closed. Scores are final and progress controls are now
+              locked.
+            </p>
+          ) : null}
           <ScoreSummary model={model} />
           <PendingBaseSummary model={model} />
           <ObjectiveSection

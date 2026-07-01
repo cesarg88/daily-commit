@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { rethrowIfRedirectError } from "@/app/server-action-error";
 import {
   createObjective,
   setObjectiveActiveState,
@@ -40,6 +41,7 @@ export async function createObjectiveAction(formData: FormData) {
       repository,
     );
   } catch (error) {
+    rethrowIfRedirectError(error);
     redirectWithActionError(error);
   }
 
@@ -57,6 +59,7 @@ export async function updateObjectiveAction(formData: FormData) {
       repository,
     );
   } catch (error) {
+    rethrowIfRedirectError(error);
     redirectWithActionError(error);
   }
 
@@ -66,23 +69,35 @@ export async function updateObjectiveAction(formData: FormData) {
 export async function deactivateObjectiveAction(formData: FormData) {
   const { founder, repository } = await getObjectiveActionContext();
 
-  await setObjectiveActiveState(
-    founder.id,
-    getObjectiveId(formData),
-    false,
-    repository,
-  );
+  try {
+    await setObjectiveActiveState(
+      founder.id,
+      getObjectiveId(formData),
+      false,
+      repository,
+    );
+  } catch (error) {
+    rethrowIfRedirectError(error);
+    redirectWithActionError(error);
+  }
+
   revalidatePath("/objectives");
 }
 
 export async function reactivateObjectiveAction(formData: FormData) {
   const { founder, repository } = await getObjectiveActionContext();
 
-  await setObjectiveActiveState(
-    founder.id,
-    getObjectiveId(formData),
-    true,
-    repository,
-  );
+  try {
+    await setObjectiveActiveState(
+      founder.id,
+      getObjectiveId(formData),
+      true,
+      repository,
+    );
+  } catch (error) {
+    rethrowIfRedirectError(error);
+    redirectWithActionError(error);
+  }
+
   revalidatePath("/objectives");
 }

@@ -18,9 +18,9 @@ The goal is to create a personal, portable, score-based daily board that helps a
 
 ## Current Phase
 
-Implementation — PR 1 Scaffold & Tooling.
+Implementation — MVP hardening for founder dogfooding.
 
-Product discovery, MVP definition, Technical Strategy, and Delivery Breakdown are approved. Current implementation must stay within the approved PR 1 scaffold constraints.
+The current app covers the founder loop across authentication, objective catalog, day configuration, Today execution, day closure, and weekly review. Current work should stay inside the approved MVP scope.
 
 ## Documentation
 
@@ -39,11 +39,24 @@ Implementation PR review handling is documented in `docs/04-delivery/review-work
 
 ```text
 npm install
+cp .env.example .env.local
 npm run dev
 npm run test
 npm run lint
 npm run typecheck
 npm run validate
+node scripts/validate-service-role-boundary.mjs
 ```
 
 Environment variable names are documented in `.env.example`. Do not commit `.env.local`.
+
+For the current MVP pass, also see:
+
+- `docs/04-delivery/mvp-local-verification.md`
+- `docs/04-delivery/founder-dogfooding-checklist.md`
+
+## Known limitations
+
+- Founder-only single-user app.
+- No AI, templates, reminders, integrations, streaks, or offline-first support.
+- Active-day edits do not keep change history.
