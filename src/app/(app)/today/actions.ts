@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { rethrowIfRedirectError } from "@/app/server-action-error";
 import { updateTodayProgress } from "@/application/use-cases/today-execution";
 import { requireAuthenticatedFounder } from "@/data/auth/server-session";
 import {
@@ -15,17 +16,20 @@ function redirectWithTodayError(message: string): never {
 }
 
 export async function updateTodayProgressAction(formData: FormData) {
+  const founder = await requireAuthenticatedFounder();
+  const input = parseTodayProgressUpdate(formData);
   let result;
 
   try {
-    const founder = await requireAuthenticatedFounder();
     result = await updateTodayProgress(
       founder.id,
-      parseTodayProgressUpdate(formData),
+      input,
       createDayRepositoryForUserSession(founder.accessToken),
       createScoreSnapshotRepositoryForUserSession(founder.accessToken),
     );
   } catch (error) {
+    rethrowIfRedirectError(error);
+
     redirectWithTodayError(
       error instanceof Error
         ? error.message

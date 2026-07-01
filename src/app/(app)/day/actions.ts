@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { rethrowIfRedirectError } from "@/app/server-action-error";
 import {
   excludeDay,
   saveDayConfiguration,
@@ -46,35 +47,40 @@ async function saveConfiguration(
   formData: FormData,
   targetState: "draft" | "active",
 ) {
+  const { founder, objectiveRepository, dayRepository } =
+    await getDayActionContext();
+  const input = {
+    date: getDate(formData),
+    selectedObjectives: parseSelectedDayObjectives(formData),
+    targetState,
+    acknowledgeActiveEdit: parseActiveEditAcknowledgement(formData),
+  };
+  let result;
+
   try {
-    const { founder, objectiveRepository, dayRepository } =
-      await getDayActionContext();
-    const result = await saveDayConfiguration(
+    result = await saveDayConfiguration(
       founder.id,
-      {
-        date: getDate(formData),
-        selectedObjectives: parseSelectedDayObjectives(formData),
-        targetState,
-        acknowledgeActiveEdit: parseActiveEditAcknowledgement(formData),
-      },
+      input,
       objectiveRepository,
       dayRepository,
     );
-
-    if (result.status === "requires-active-edit-acknowledgement") {
-      redirectWithDayError("Acknowledge the active-day change before saving.");
-    }
-
-    if (result.status === "invalid") {
-      redirectWithDayError(
-        describeDayValidationIssues(result.validation.issues).join(" "),
-      );
-    }
   } catch (error) {
+    rethrowIfRedirectError(error);
+
     redirectWithDayError(
       error instanceof Error
         ? error.message
         : "Unable to save the day configuration.",
+    );
+  }
+
+  if (result.status === "requires-active-edit-acknowledgement") {
+    redirectWithDayError("Acknowledge the active-day change before saving.");
+  }
+
+  if (result.status === "invalid") {
+    redirectWithDayError(
+      describeDayValidationIssues(result.validation.issues).join(" "),
     );
   }
 
@@ -90,11 +96,13 @@ export async function activateDayAction(formData: FormData) {
 }
 
 export async function excludeDayAction(formData: FormData) {
-  try {
-    const { founder, dayRepository } = await getDayActionContext();
+  const { founder, dayRepository } = await getDayActionContext();
 
+  try {
     await excludeDay(founder.id, getDate(formData), dayRepository);
   } catch (error) {
+    rethrowIfRedirectError(error);
+
     redirectWithDayError(
       error instanceof Error ? error.message : "Unable to exclude this day.",
     );
