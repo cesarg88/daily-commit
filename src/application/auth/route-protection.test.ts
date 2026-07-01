@@ -30,6 +30,13 @@ describe("decideRouteProtection", () => {
     });
   });
 
+  it("redirects unauthenticated week review access to login", () => {
+    expect(decideRouteProtection("/week", "", false)).toEqual({
+      type: "redirect",
+      location: "/login?next=%2Fweek",
+    });
+  });
+
   it("allows authenticated app route access", () => {
     expect(decideRouteProtection("/app", "", true)).toEqual({
       type: "allow",

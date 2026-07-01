@@ -20,6 +20,7 @@ export default async function AppLayout({
             <Link href="/app">Home</Link>
             <Link href="/today">Today</Link>
             <Link href="/day">Configure day</Link>
+            <Link href="/week">Week</Link>
             <Link href="/objectives">Objectives</Link>
           </nav>
           <form action="/logout" method="post">
