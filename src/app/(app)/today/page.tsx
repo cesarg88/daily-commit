@@ -1,6 +1,9 @@
 import { getTodayExecution } from "@/application/use-cases/today-execution";
 import { requireAuthenticatedFounder } from "@/data/auth/server-session";
-import { createDayRepositoryForUserSession } from "@/data/repositories/server-repositories";
+import {
+  createDayRepositoryForUserSession,
+  createScoreSnapshotRepositoryForUserSession,
+} from "@/data/repositories/server-repositories";
 import { getMvpTodayDate } from "@/domain/time/mvp-timezone";
 import { TodayExecutionView } from "@/presentation/components/today-execution";
 import { updateTodayProgressAction } from "./actions";
@@ -22,6 +25,7 @@ export default async function TodayPage({ searchParams }: TodayPageProps) {
     founder.id,
     getMvpTodayDate(),
     createDayRepositoryForUserSession(founder.accessToken),
+    createScoreSnapshotRepositoryForUserSession(founder.accessToken),
   );
 
   return (

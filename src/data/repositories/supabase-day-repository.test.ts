@@ -231,4 +231,80 @@ describe("SupabaseDayRepository", () => {
     expect(daysTable.calls.gte).toEqual([["date", "2026-07-01"]]);
     expect(daysTable.calls.lte).toEqual([["date", "2026-07-07"]]);
   });
+
+  it("lists active days before a date with their owning user and objectives", async () => {
+    const daysTable = createMockTable({
+      awaitResult: {
+        data: [
+          {
+            id: "day-1",
+            user_id: "user-1",
+            date: "2026-07-01",
+            state: "active",
+            closed_at: null,
+          },
+        ],
+        error: null,
+      },
+    });
+    const dailyObjectivesTable = createMockTable({
+      awaitResult: {
+        data: [
+          {
+            id: "daily-1",
+            objective_id: "objective-1",
+            name_snapshot: "Sleep",
+            type: "binary",
+            kind: "base",
+            weight: 100,
+            target_value: null,
+            current_value: null,
+            unit: null,
+            is_completed: false,
+          },
+        ],
+        error: null,
+      },
+    });
+    const repository = new SupabaseDayRepository(
+      createMockSupabaseClient({
+        days: [daysTable],
+        daily_objectives: [dailyObjectivesTable],
+      }),
+    );
+
+    await expect(
+      repository.listActiveBeforeDate("2026-07-02", "user-1"),
+    ).resolves.toEqual([
+      {
+        userId: "user-1",
+        day: {
+          id: "day-1",
+          date: "2026-07-01",
+          state: "active",
+        },
+        objectives: [
+          {
+            id: "daily-1",
+            objectiveId: "objective-1",
+            nameSnapshot: "Sleep",
+            type: "binary",
+            kind: "base",
+            weight: 100,
+            isCompleted: false,
+          },
+        ],
+      },
+    ]);
+
+    expect(daysTable.calls.eq).toEqual([
+      ["state", "active"],
+      ["user_id", "user-1"],
+    ]);
+    expect(daysTable.calls.lt).toEqual([["date", "2026-07-02"]]);
+    expect(dailyObjectivesTable.calls.eq).toEqual([
+      ["user_id", "user-1"],
+      ["day_id", "day-1"],
+    ]);
+  });
 });

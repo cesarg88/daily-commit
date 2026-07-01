@@ -17,6 +17,7 @@ export interface MockTableCalls {
   gte: Array<[string, unknown]>;
   in: Array<[string, unknown[]]>;
   insert: Array<[unknown]>;
+  lt: Array<[string, unknown]>;
   lte: Array<[string, unknown]>;
   order: Array<[string, { ascending: boolean }]>;
   select: Array<[string]>;
@@ -34,6 +35,7 @@ export interface MockTable {
     gte: (column: string, value: unknown) => MockTable["chain"];
     in: (column: string, values: unknown[]) => MockTable["chain"];
     insert: (value: unknown) => MockTable["chain"];
+    lt: (column: string, value: unknown) => MockTable["chain"];
     lte: (column: string, value: unknown) => MockTable["chain"];
     maybeSingle: () => Promise<QueryResult<unknown>>;
     order: (
@@ -64,6 +66,7 @@ export function createMockTable<TAwait = unknown, TSingle = unknown>(
     gte: [],
     in: [],
     insert: [],
+    lt: [],
     lte: [],
     order: [],
     select: [],
@@ -97,6 +100,10 @@ export function createMockTable<TAwait = unknown, TSingle = unknown>(
     },
     insert: (value) => {
       calls.insert.push([value]);
+      return chain;
+    },
+    lt: (column, value) => {
+      calls.lt.push([column, value]);
       return chain;
     },
     lte: (column, value) => {
