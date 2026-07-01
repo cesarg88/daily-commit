@@ -1,9 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { placeholderMessage, placeholderTitle } from "./placeholder";
+import { describeDayValidationIssues } from "@/presentation/copy/day-validation-messages";
 
-describe("placeholder route", () => {
-  it("defines placeholder copy without product behavior", () => {
-    expect(placeholderTitle).toBe("Daily Commit");
-    expect(placeholderMessage).toBe("Web app scaffold placeholder.");
+describe("root app copy helpers", () => {
+  it("reuses the same day activation copy across UI surfaces", () => {
+    expect(
+      describeDayValidationIssues([
+        { code: "base-weight-total-below-100" },
+        { code: "missing-numeric-unit" },
+      ]),
+    ).toEqual([
+      "Base objectives must add up to exactly 100%.",
+      "Numeric base objectives need a unit.",
+    ]);
   });
 });

@@ -60,7 +60,8 @@ function SummaryCards({
           {formatScore(model.summary.performance.averageScore)}
         </p>
         <p className="mt-2 text-sm text-neutral-600">
-          {model.summary.performance.scoredDayCount} scored days
+          {model.summary.performance.scoredDayCount} scored day
+          {model.summary.performance.scoredDayCount === 1 ? "" : "s"}
         </p>
       </div>
       <div className="border border-neutral-200 bg-white p-4">
@@ -121,6 +122,10 @@ export function WeeklyReviewView({ model }: Readonly<WeeklyReviewViewProps>) {
             {formatDate(model.summary.range.endDate)}
           </p>
           <h1 className="mt-2 text-2xl font-semibold">Week</h1>
+          <p className="mt-2 max-w-2xl text-sm text-neutral-600">
+            Performance comes only from closed, scored days. Consistency still
+            shows which dates were excluded or left unconfigured.
+          </p>
         </div>
         <p className="text-sm text-neutral-600">
           Week of {formatDate(model.containingDate)}
@@ -130,10 +135,16 @@ export function WeeklyReviewView({ model }: Readonly<WeeklyReviewViewProps>) {
       <SummaryCards model={model} />
 
       {model.summary.performance.averageScore === null ? (
-        <p className="border border-neutral-200 bg-white p-4 text-sm text-neutral-600">
-          No weekly performance yet. Consistency still shows which days were
-          scored, excluded, or left unconfigured.
-        </p>
+        <section className="border border-neutral-200 bg-white p-4 text-sm text-neutral-600">
+          <h2 className="text-base font-semibold text-neutral-900">
+            No scored days yet
+          </h2>
+          <p className="mt-2">
+            Weekly performance appears after the first closed day with a stored
+            score. Until then, use the consistency row below to confirm which
+            days were excluded or still need configuration.
+          </p>
+        </section>
       ) : null}
 
       <WeekGrid days={model.summary.days} />

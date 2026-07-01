@@ -3,7 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Daily Commit",
-  description: "Minimal scaffold for the Daily Commit web app.",
+  description:
+    "Founder MVP for planning, executing, and reviewing daily commitments.",
 };
 
 export default function RootLayout({

@@ -10,6 +10,14 @@ type ObjectiveCatalogViewProps = {
   reactivateAction: (formData: FormData) => void | Promise<void>;
 };
 
+function buttonClasses(kind: "primary" | "secondary"): string {
+  if (kind === "primary") {
+    return "w-full bg-neutral-950 px-4 py-2 text-sm font-medium text-white sm:w-auto";
+  }
+
+  return "w-full border border-neutral-300 bg-white px-3 py-2 text-sm font-medium sm:w-auto";
+}
+
 function ObjectiveFormFields({
   objective,
 }: Readonly<{
@@ -123,10 +131,7 @@ function ObjectiveRow({
         <summary className="cursor-pointer text-sm font-medium">Edit</summary>
         <form action={updateAction} className="mt-4 space-y-4">
           <ObjectiveFormFields objective={objective} />
-          <button
-            className="bg-neutral-950 px-4 py-2 text-sm font-medium text-white"
-            type="submit"
-          >
+          <button className={buttonClasses("primary")} type="submit">
             Save
           </button>
         </form>
@@ -134,10 +139,7 @@ function ObjectiveRow({
 
       <form action={activeStateAction} className="mt-4">
         <input name="objectiveId" type="hidden" value={objective.id} />
-        <button
-          className="border border-neutral-300 bg-white px-3 py-2 text-sm font-medium"
-          type="submit"
-        >
+        <button className={buttonClasses("secondary")} type="submit">
           {objective.isActive ? "Deactivate" : "Reactivate"}
         </button>
       </form>
@@ -160,48 +162,78 @@ export function ObjectiveCatalogView({
         <div>
           <p className="text-sm font-medium text-neutral-500">Objectives</p>
           <h1 className="mt-2 text-2xl font-semibold">Objective catalog</h1>
+          <p className="mt-2 max-w-2xl text-sm text-neutral-600">
+            Keep this list lean. Save reusable commitments here, then pull them
+            into the day builder when they belong in today&apos;s board.
+          </p>
         </div>
         <p className="text-sm text-neutral-600">
-          {objectives.length} saved · {inactiveCount} inactive
+          {objectives.filter((objective) => objective.isActive).length} active ·{" "}
+          {inactiveCount} inactive
         </p>
       </div>
 
       {errorMessage ? (
-        <p className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+        <p
+          aria-live="polite"
+          className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+          role="alert"
+        >
           {errorMessage}
         </p>
       ) : null}
 
       <section className="border border-neutral-200 bg-white p-4">
         <h2 className="text-base font-semibold">Create objective</h2>
+        <p className="mt-2 text-sm text-neutral-600">
+          Numeric objectives need a target and unit. Suggested weight is
+          optional and only seeds day configuration.
+        </p>
         <form action={createAction} className="mt-4 space-y-4">
           <ObjectiveFormFields />
-          <button
-            className="bg-neutral-950 px-4 py-2 text-sm font-medium text-white"
-            type="submit"
-          >
+          <button className={buttonClasses("primary")} type="submit">
             Create
           </button>
         </form>
       </section>
 
       <section className="space-y-3">
-        {objectives.length > 0 ? (
-          objectives.map((objective) => (
-            <ObjectiveRow
-              deactivateAction={deactivateAction}
-              key={objective.id}
-              objective={objective}
-              reactivateAction={reactivateAction}
-              updateAction={updateAction}
-            />
-          ))
+        {objectives.some((objective) => objective.isActive) ? (
+          objectives
+            .filter((objective) => objective.isActive)
+            .map((objective) => (
+              <ObjectiveRow
+                deactivateAction={deactivateAction}
+                key={objective.id}
+                objective={objective}
+                reactivateAction={reactivateAction}
+                updateAction={updateAction}
+              />
+            ))
         ) : (
           <p className="border border-neutral-200 bg-white p-4 text-sm text-neutral-600">
-            No objectives yet.
+            No active objectives yet. Create the first few commitments you want
+            available for day setup.
           </p>
         )}
       </section>
+
+      {inactiveCount > 0 ? (
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold">Inactive objectives</h2>
+          {objectives
+            .filter((objective) => !objective.isActive)
+            .map((objective) => (
+              <ObjectiveRow
+                deactivateAction={deactivateAction}
+                key={objective.id}
+                objective={objective}
+                reactivateAction={reactivateAction}
+                updateAction={updateAction}
+              />
+            ))}
+        </section>
+      ) : null}
     </section>
   );
 }

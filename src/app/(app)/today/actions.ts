@@ -15,13 +15,23 @@ function redirectWithTodayError(message: string): never {
 }
 
 export async function updateTodayProgressAction(formData: FormData) {
-  const founder = await requireAuthenticatedFounder();
-  const result = await updateTodayProgress(
-    founder.id,
-    parseTodayProgressUpdate(formData),
-    createDayRepositoryForUserSession(founder.accessToken),
-    createScoreSnapshotRepositoryForUserSession(founder.accessToken),
-  );
+  let result;
+
+  try {
+    const founder = await requireAuthenticatedFounder();
+    result = await updateTodayProgress(
+      founder.id,
+      parseTodayProgressUpdate(formData),
+      createDayRepositoryForUserSession(founder.accessToken),
+      createScoreSnapshotRepositoryForUserSession(founder.accessToken),
+    );
+  } catch (error) {
+    redirectWithTodayError(
+      error instanceof Error
+        ? error.message
+        : "Unable to update today's progress.",
+    );
+  }
 
   if (result.status === "not-active") {
     redirectWithTodayError("Activate today's commitment before updating it.");
