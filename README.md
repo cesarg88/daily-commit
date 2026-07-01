@@ -18,9 +18,9 @@ The goal is to create a personal, portable, score-based daily board that helps a
 
 ## Current Phase
 
-Implementation — MVP hardening for founder dogfooding.
+Implementation complete for the current rules-engine MVP.
 
-The current app covers the founder loop across authentication, objective catalog, day configuration, Today execution, day closure, and weekly review. Current work should stay inside the approved MVP scope.
+The current app covers the founder loop across authentication, objective catalog, day configuration, Today execution, day closure, and weekly review. It is ready for founder dogfooding as a rules-engine MVP, not yet as a polished or low-friction usable product.
 
 ## Documentation
 
@@ -54,6 +54,7 @@ For the current MVP pass, also see:
 
 - `docs/04-delivery/mvp-local-verification.md`
 - `docs/04-delivery/founder-dogfooding-checklist.md`
+- `docs/04-delivery/mvp-dogfooding-start.md`
 
 ## Known limitations
 
