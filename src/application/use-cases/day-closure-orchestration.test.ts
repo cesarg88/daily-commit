@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   closeActiveDaysBeforeDate,
   closeDayIfEligible,
+  saveDayAndCloseIfEligible,
 } from "./day-closure-orchestration";
 import type {
   DayRepository,
@@ -17,6 +18,7 @@ import { createBinaryDailyObjective } from "../../test/builders/daily-objective-
 
 function createDayRepository(
   activeRecords: PersistedUserDayRecord[],
+  operations: string[] = [],
 ): DayRepository & {
   savedRecords: PersistedDayRecord[];
   updatedDays: Day[];
@@ -42,10 +44,12 @@ function createDayRepository(
       return activeRecords.map((record) => record.day);
     },
     async saveDay(_userId: string, record: PersistedDayRecord) {
+      operations.push(`save-day:${record.day.id}`);
       savedRecords.push(record);
       return record;
     },
     async updateDay(_userId: string, day: Day) {
+      operations.push(`update-day:${day.id}`);
       updatedDays.push(day);
       return day;
     },
@@ -54,6 +58,7 @@ function createDayRepository(
 
 function createScoreSnapshotRepository(
   initialSnapshots: ClosedDayScoreSnapshot[] = [],
+  operations: string[] = [],
 ): ScoreSnapshotRepository & { upserts: ClosedDayScoreSnapshot[] } {
   const snapshots = new Map(
     initialSnapshots.map((snapshot) => [snapshot.dayId, snapshot]),
@@ -73,6 +78,7 @@ function createScoreSnapshotRepository(
       });
     },
     async upsert(_userId: string, snapshot: ClosedDayScoreSnapshot) {
+      operations.push(`upsert-snapshot:${snapshot.dayId}`);
       snapshots.set(snapshot.dayId, snapshot);
       upserts.push(snapshot);
       return snapshot;
@@ -110,8 +116,9 @@ function activeRecord(
 
 describe("day closure orchestration", () => {
   it("closes a base-complete day and stores a score snapshot", async () => {
-    const dayRepository = createDayRepository([]);
-    const snapshotRepository = createScoreSnapshotRepository();
+    const operations: string[] = [];
+    const dayRepository = createDayRepository([], operations);
+    const snapshotRepository = createScoreSnapshotRepository([], operations);
 
     const result = await closeDayIfEligible(
       "user-1",
@@ -145,6 +152,31 @@ describe("day closure orchestration", () => {
         state: "closed",
       }),
     ]);
+    expect(operations).toEqual(["update-day:day-1", "upsert-snapshot:day-1"]);
+  });
+
+  it("persists a newly closed saved day before snapshot upsert", async () => {
+    const operations: string[] = [];
+    const dayRepository = createDayRepository([], operations);
+    const snapshotRepository = createScoreSnapshotRepository([], operations);
+
+    const result = await saveDayAndCloseIfEligible(
+      "user-1",
+      {
+        day: {
+          id: "day-1",
+          date: "2026-07-01",
+          state: "active",
+        },
+        objectives: activeRecord().objectives,
+      },
+      dayRepository,
+      snapshotRepository,
+      new Date("2026-07-01T10:00:00.000Z"),
+    );
+
+    expect(result.status).toBe("closed");
+    expect(operations).toEqual(["save-day:day-1", "upsert-snapshot:day-1"]);
   });
 
   it("closes midnight-eligible active days lazily before the current Madrid date", async () => {

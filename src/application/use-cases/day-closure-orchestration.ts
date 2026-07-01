@@ -82,18 +82,22 @@ export async function closeDayIfEligible(
     day: closure.day,
     objectives: record.objectives,
   };
+  const persistedDay = await dayRepository.updateDay(userId, closure.day);
 
   await upsertClosedDayScoreSnapshot(
     userId,
-    closedRecord,
+    {
+      day: persistedDay,
+      objectives: closedRecord.objectives,
+    },
     scoreSnapshotRepository,
-    closure.day.closedAt ?? currentDateTime.toISOString(),
+    persistedDay.closedAt ?? currentDateTime.toISOString(),
   );
 
   return {
     status: "closed",
     record: {
-      day: await dayRepository.updateDay(userId, closure.day),
+      day: persistedDay,
       objectives: record.objectives,
     },
   };
@@ -115,17 +119,16 @@ export async function saveDayAndCloseIfEligible(
     day: closure.day,
     objectives: record.objectives,
   };
+  const savedRecord = await dayRepository.saveDay(userId, recordToSave);
 
   if (closure.didClose) {
     await upsertClosedDayScoreSnapshot(
       userId,
-      recordToSave,
+      savedRecord,
       scoreSnapshotRepository,
-      closure.day.closedAt ?? currentDateTime.toISOString(),
+      savedRecord.day.closedAt ?? currentDateTime.toISOString(),
     );
   }
-
-  const savedRecord = await dayRepository.saveDay(userId, recordToSave);
 
   return {
     status: closure.didClose ? "closed" : "not-eligible",
