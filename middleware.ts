@@ -21,6 +21,7 @@ export const config = {
     "/app/:path*",
     "/today/:path*",
     "/day/:path*",
+    "/week/:path*",
     "/objectives/:path*",
   ],
 };
