@@ -29,6 +29,7 @@ Ready in this phase does not mean:
 
 - polished UI;
 - low-friction product flow;
+- polished or low-friction usable product readiness;
 - broader user readiness;
 - production launch readiness beyond the limited founder MVP.
 
@@ -141,12 +142,12 @@ The current MVP intentionally does not include:
 - offline-first support;
 - multi-user support.
 
-This phase should be understood as a rules-engine MVP with enough product surface to test the real daily loop, not as a fully polished or low-friction product.
+This phase should be understood as a rules-engine MVP with enough product surface to test the real daily loop, not as a fully polished or low-friction usable product.
 
 ## Next phase recommendation
 
-Findings from this dogfooding pass should be converted into a new epic:
+Findings from this dogfooding pass should be converted into a future epic, not active implementation in this PR:
 
 - `Epic — Founder Usable MVP`
 
-That epic should turn the current rules-engine MVP into a low-friction daily product flow without expanding into broader post-MVP scope prematurely.
+That future epic should turn the current rules-engine MVP into a low-friction daily product flow without expanding into broader post-MVP scope prematurely.

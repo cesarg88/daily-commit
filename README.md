@@ -20,7 +20,7 @@ The goal is to create a personal, portable, score-based daily board that helps a
 
 Implementation complete for the current rules-engine MVP.
 
-The current app covers the founder loop across authentication, objective catalog, day configuration, Today execution, day closure, and weekly review. It is ready for founder dogfooding as a rules-engine MVP, not yet as a fully polished or low-friction product.
+The current app covers the founder loop across authentication, objective catalog, day configuration, Today execution, day closure, and weekly review. It is ready for founder dogfooding as a rules-engine MVP, not yet as a polished or low-friction usable product.
 
 ## Documentation
 
